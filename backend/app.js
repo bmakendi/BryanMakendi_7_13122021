@@ -1,21 +1,11 @@
 //Server behavior
 const express = require('express')
-const { Sequelize } = require('sequelize')
-require('dotenv').config()
+const { sequelize } = require('./db.config')
+const userRoutes = require('./routes/user')
 
 const app = express()
 
-//Connecting to the database
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    dialect: 'mysql',
-  }
-)
-
+//Testing connection to database
 sequelize
   .authenticate()
   .then(() => {
@@ -42,6 +32,7 @@ app.use((req, res, next) => {
 //Parsing json
 app.use(express.json())
 
+app.use('/api/auth', userRoutes)
 app.get('/', (req, res) => {
   return res.status(200).json({ message: 'hello world' })
 })
