@@ -45,7 +45,7 @@ exports.login = (req, res, next) => {
       .status(400)
       .send(new Error('Bad request at login ! Check your entries.'))
   }
-  User.findOne({ email: req.body.email })
+  User.findOne({ where: { email: req.body.email } })
     .then(user => {
       if (!user)
         return res.status(401).json({ error: 'Utilisateur non trouvé !' })
