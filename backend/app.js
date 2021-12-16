@@ -1,19 +1,7 @@
 //Server behavior
 const express = require('express')
-const { sequelize } = require('./db.config')
 const userRoutes = require('./routes/user')
-
 const app = express()
-
-//Testing connection to database
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('connection réussie !')
-  })
-  .catch(error => {
-    console.log('Erreur, connection échouée:', error)
-  })
 
 //Setting request headers
 app.use((req, res, next) => {

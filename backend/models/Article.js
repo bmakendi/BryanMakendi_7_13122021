@@ -1,30 +1,18 @@
-const { DataTypes } = require('sequelize')
-const { sequelize } = require('../db.config')
-
-const Article = sequelize.define('Article', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  content: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Users',
-      key: 'uid',
+module.exports = (sequelize, DataTypes) => {
+  const Article = sequelize.define('Article', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-  },
-})
-
-Article.sync()
-
-module.exports = Article
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+  })
+  return Article
+}

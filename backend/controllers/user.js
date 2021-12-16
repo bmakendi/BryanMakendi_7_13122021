@@ -1,6 +1,7 @@
-const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const db = require('../models')
+const User = db.user
 
 /**
  * Signing up leads to this function
