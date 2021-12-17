@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    pictureUrl: {
+      type: DataTypes.STRING,
+    },
     job: {
       type: DataTypes.STRING,
     },

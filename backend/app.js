@@ -22,8 +22,8 @@ app.use((req, res, next) => {
 app.use(express.json())
 
 //User request will end up on these routes
-app.use('/api/auth', userRoutes)
-app.use('/api/articles', articleRoutes)
+app.use('/auth', userRoutes)
+app.use('/articles', articleRoutes)
 
 app.get('/', (req, res) => {
   return res.status(200).json({ message: 'hello world' })
