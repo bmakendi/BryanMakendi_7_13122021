@@ -46,6 +46,10 @@ db.Sequelize = Sequelize
 db.user = require('./User')(sequelize, Sequelize)
 db.article = require('./Article')(sequelize, Sequelize)
 
-//Joins and foreign keys
+//Associations
+
+//One to many between an article and a user
+db.user.hasMany(db.article, { onDelete: 'CASCADE' })
+db.article.belongsTo(db.user, { onDelete: 'CASCADE' })
 
 module.exports = db

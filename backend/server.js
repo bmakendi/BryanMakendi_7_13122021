@@ -49,6 +49,6 @@ server.on('listening', () => {
   else console.log('Listening on ' + bind)
 })
 
-db.sequelize.sync().then(() => {
+db.sequelize.sync({ alter: true }).then(() => {
   server.listen(port)
 })

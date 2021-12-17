@@ -1,6 +1,7 @@
 //Server behavior
 const express = require('express')
 const userRoutes = require('./routes/user')
+const articleRoutes = require('./routes/article')
 const app = express()
 
 //Setting request headers
@@ -20,7 +21,10 @@ app.use((req, res, next) => {
 //Parsing json
 app.use(express.json())
 
+//User request will end up on these routes
 app.use('/api/auth', userRoutes)
+app.use('/api/articles', articleRoutes)
+
 app.get('/', (req, res) => {
   return res.status(200).json({ message: 'hello world' })
 })

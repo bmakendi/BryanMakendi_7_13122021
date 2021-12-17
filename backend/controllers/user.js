@@ -56,8 +56,8 @@ exports.login = (req, res, next) => {
           if (!valid)
             return res.status(401).json({ error: 'Mauvais mot de passe !' }) //Couldn't log in since passwords don't match each other
           res.status(200).json({
-            userId: user.uid,
-            token: jwt.sign({ userId: user.uid }, process.env.SECRET_KEY, {
+            userId: user.id,
+            token: jwt.sign({ userId: user.id }, process.env.SECRET_KEY, {
               expiresIn: '24h',
             }),
           })
