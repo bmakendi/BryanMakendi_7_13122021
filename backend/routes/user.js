@@ -16,4 +16,7 @@ router.put('/modify', auth, multer, userCtrl.modify)
 //When a user wants to delete its account, a request gets sent to this path
 router.delete('/delete', auth, userCtrl.delete)
 
+//When you go on a user's profile, a request gets sent to this path
+router.get('/user/:id', auth, userCtrl.getUser)
+
 module.exports = router

@@ -95,11 +95,9 @@ exports.modify = (req, res, next) => {
     )
       .then(() => res.status(200).json({ message: 'Photo bien modifié !' }))
       .catch(error =>
-        res
-          .status(400)
-          .json({
-            message: 'Erreur lors de la modification de la photo : ' + error,
-          })
+        res.status(400).json({
+          message: 'Erreur lors de la modification de la photo : ' + error,
+        })
       )
   } else {
     User.update(
@@ -124,4 +122,20 @@ exports.delete = (req, res, next) => {
       return res.status(200).json({ message: user + ' utilisateur supprimé !' })
     })
     .catch(error => res.status(400).json({ error }))
+}
+
+/**
+ * Clicking on a user's profile leads to this function.
+ * Password is excluded from the response.
+ */
+exports.getUser = (req, res, next) => {
+  if (!req.params.id) {
+    return res.status(400).send(new Error('Bad request ! Need a userId.'))
+  }
+  User.scope('withoutPassword')
+    .findOne({ where: { id: req.params.id } })
+    .then(user => res.status(200).json(user))
+    .catch(error =>
+      res.status(404).json({ message: 'Utilisateur introuvable.' })
+    )
 }
