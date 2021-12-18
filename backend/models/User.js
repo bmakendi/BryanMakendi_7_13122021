@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       job: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       admin: {
         type: DataTypes.BOOLEAN,

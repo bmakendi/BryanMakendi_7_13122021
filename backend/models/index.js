@@ -45,11 +45,29 @@ db.Sequelize = Sequelize
 //Defining Models
 db.user = require('./User')(sequelize, Sequelize)
 db.article = require('./Article')(sequelize, Sequelize)
+db.like = require('./Like')(sequelize, Sequelize)
+db.comment = require('./Comment')(sequelize, Sequelize)
 
 //Associations
 
 //One to many between an article and a user
 db.user.hasMany(db.article, { onDelete: 'CASCADE' })
 db.article.belongsTo(db.user, { onDelete: 'CASCADE' })
+
+//Many to many between users and articles through likes table
+db.user.belongsToMany(db.article, { through: db.like }, { onDelete: 'CASCADE' })
+db.article.belongsToMany(db.user, { through: db.like }, { onDelete: 'CASCADE' })
+
+//Many to many between users and articles through comments table
+db.user.belongsToMany(
+  db.article,
+  { through: db.comment },
+  { onDelete: 'CASCADE' }
+)
+db.article.belongsToMany(
+  db.user,
+  { through: db.comment },
+  { onDelete: 'CASCADE' }
+)
 
 module.exports = db

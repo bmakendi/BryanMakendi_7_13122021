@@ -5,19 +5,33 @@ const User = db.user
 const fs = require('fs')
 
 /**
- * Signing up leads to this function
- * We use bcrypt to hide the user's password in the database, then we save the user's info
+ * Signing up leads to this function.
+ * We use bcrypt to hide the user's password in the database, then we save the user's info.
+ * If the user is in communication, they get to be a mod, so admin is set to 1.
  */
 exports.signup = (req, res, next) => {
   if (
-    !req.body.password ||
     !req.body.email ||
+    !req.body.password ||
     !req.body.name ||
-    !req.body.firstname
+    !req.body.firstname ||
+    !req.body.job
   ) {
     return res
       .status(400)
       .send(new Error('Bad request at signup ! Check your entries.'))
+  }
+  let admin, job
+  if (
+    req.body.job.toLowerCase() === 'chargé de communication' ||
+    req.body.job.toLowerCase() === 'chargée de communication' ||
+    req.body.job.toLowerCase() === 'chargé.e de communication'
+  ) {
+    admin = 1
+    job = req.body.job.toLowerCase()
+  } else {
+    admin = 0
+    job = req.body.job.toLowerCase()
   }
   bcrypt
     .hash(req.body.password, 10)
@@ -27,6 +41,8 @@ exports.signup = (req, res, next) => {
         password: hash,
         name: req.body.name,
         firstname: req.body.firstname,
+        job: job,
+        admin: admin,
       })
         .then(() =>
           res.status(201).json({
