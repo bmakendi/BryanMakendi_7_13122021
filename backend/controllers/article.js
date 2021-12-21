@@ -1,5 +1,3 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 const db = require('../models')
 const Article = db.article
 
@@ -22,6 +20,10 @@ exports.postArticle = (req, res, next) => {
     .catch(error => res.status(400).json({ error }))
 }
 
+exports.modifyArticle = (req, res, next) => {}
+
 exports.getArticles = (req, res, next) => {}
 
 exports.getOneArticle = (req, res, next) => {}
+
+exports.deleteArticle = (req, res, next) => {}

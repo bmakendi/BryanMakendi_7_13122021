@@ -6,3 +6,5 @@ const auth = require('../middleware/auth')
 /**
  * A post comment, get all comments, delete comment route
  */
+
+module.exports = router

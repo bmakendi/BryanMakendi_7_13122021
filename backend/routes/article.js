@@ -6,13 +6,16 @@ const auth = require('../middleware/auth')
 //Posting an article sends a request to this path
 router.post('/post', auth, articleCtrl.postArticle)
 
-/**router.put */
+//Updating an article sends a request to this path
+router.put('/:id', auth, articleCtrl.modifyArticle)
+
 //Fetching all articles sends a request to this path
-/* router.get('/', auth, articleCtrl.getArticles)
+router.get('/', auth, articleCtrl.getArticles)
 
 //Fetching one article sends a request to this path
-router.get('/:id', auth, articleCtrl.getOneArticle) */
+router.get('/:id', auth, articleCtrl.getOneArticle)
 
-/* router.delete */
+//Deleting an article sends a request to this path
+router.delete('/:id', auth, articleCtrl.deleteArticle)
 
 module.exports = router

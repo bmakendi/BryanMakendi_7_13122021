@@ -8,3 +8,5 @@ const auth = require('../middleware/auth')
  * get all likes
  * delete like
  */
+
+module.exports = router
