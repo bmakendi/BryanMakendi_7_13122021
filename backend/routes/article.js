@@ -4,7 +4,7 @@ const articleCtrl = require('../controllers/article')
 const auth = require('../middleware/auth')
 
 //Posting an article sends a request to this path
-router.post('/post', auth, articleCtrl.postArticle)
+router.post('/', auth, articleCtrl.postArticle)
 
 //Updating an article sends a request to this path
 router.put('/:id', auth, articleCtrl.modifyArticle)

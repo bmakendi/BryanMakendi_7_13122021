@@ -87,9 +87,9 @@ exports.login = (req, res, next) => {
 /**
  * Updating a profile picture or a job title will lead to this function.
  */
-exports.modify = (req, res, next) => {
+exports.modifyUser = (req, res, next) => {
   if (req.file) {
-    User.findOne({ where: { id: req.body.id } })
+    User.findOne({ where: { id: req.params.id } })
       .then(user => {
         if (!user)
           return res.status(401).json({ error: 'Utilisateur non trouvé !' })
@@ -116,10 +116,7 @@ exports.modify = (req, res, next) => {
         })
       )
   } else {
-    User.update(
-      { job: req.body.changes.job },
-      { where: { id: req.body.userId } }
-    )
+    User.update({ job: req.body.job }, { where: { id: req.body.userId } })
       .then(() => res.status(200).json({ message: 'Job bien modifié !' }))
       .catch(error =>
         res
@@ -131,11 +128,21 @@ exports.modify = (req, res, next) => {
 
 /**
  * Deleting an account will lead to this function.
+ * User needs to be the owner of the account, or a moderator, to be able to delete it.
  */
-exports.delete = (req, res, next) => {
-  User.destroy({ where: { id: req.body.id } })
-    .then(user => {
-      return res.status(200).json({ message: user + ' utilisateur supprimé !' })
+exports.deleteUser = (req, res, next) => {
+  if (!req.params.id) {
+    return res.status(400).send(new Error('Bad request ! Need a userId.'))
+  }
+  if (req.body.userId !== req.params.id && req.body.admin === 'false')
+    return res.status(401).json({
+      message: "Vous n'avez pas l'autorisation de supprimer cet utilisateur.",
+    })
+  User.destroy({ where: { id: req.params.id } })
+    .then(deleted => {
+      return res
+        .status(200)
+        .json({ message: deleted + ' utilisateur supprimé !' })
     })
     .catch(error => res.status(400).json({ error }))
 }

@@ -11,12 +11,12 @@ router.post('/signup', userCtrl.signup)
 router.post('/login', userCtrl.login)
 
 //When a user wants to update his profile picture or/and his job title, a request gets sent to this path
-router.put('/modify', auth, multer, userCtrl.modify)
+router.put('/:id', auth, multer, userCtrl.modifyUser)
 
 //When a user wants to delete its account, a request gets sent to this path
-router.delete('/delete', auth, userCtrl.delete)
+router.delete('/:id', auth, userCtrl.deleteUser)
 
 //When you go on a user's profile, a request gets sent to this path
-router.get('/user/:id', auth, userCtrl.getUser)
+router.get('/:id', auth, userCtrl.getUser)
 
 module.exports = router
