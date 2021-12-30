@@ -16,6 +16,12 @@ export const signupSchema = yup.object().shape({
     .required(
       'Le mot de passe doit contenir au moins 6 caractères et 1 chiffre'
     ),
+  confirmPassword: yup
+    .string()
+    .oneOf(
+      [yup.ref('password'), null],
+      'Les mots de passe ne correspondent pas'
+    ),
   name: yup.string().min(2).required('Veuillez entrer un nom valide'),
   firstname: yup.string().min(2).required('Veuillez entrer un prénom valide'),
   job: yup.string().required('Veuillez indiquer votre emploi'),

@@ -18,13 +18,14 @@ export const FormWrapper = styled.form`
   gap: 27px;
 `
 export const StyledInput = styled(TextField)`
+  background-color: white;
+
   fieldset {
     border-radius: 10px;
     border-color: ${colors.grey};
   }
   input {
     padding: 16px 14px 16px 0;
-    background-color: white;
     &::placeholder {
       color: ${colors.grey};
       font-size: 1.0625rem;
