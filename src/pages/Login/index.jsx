@@ -22,7 +22,11 @@ import innerEllipse from '../../assets/form-background/inner_ellipse.svg'
 import outerEllipse from '../../assets/form-background/outer_ellipse.svg'
 
 const Login = () => {
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(loginSchema),
   })
 
@@ -61,6 +65,8 @@ const Login = () => {
                 </InputAdornment>
               ),
             }}
+            error={!!errors.email}
+            helperText={errors.email?.message}
           />
           <StyledInput
             type='password'
@@ -73,6 +79,8 @@ const Login = () => {
                 </InputAdornment>
               ),
             }}
+            error={!!errors.password}
+            helperText={errors.password?.message}
           />
           <RoundedBtn type='submit'>Se connecter</RoundedBtn>
           <StyledLink to='/signup'>Créer un compte</StyledLink>

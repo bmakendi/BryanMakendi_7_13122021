@@ -23,7 +23,11 @@ import LockIcon from '@mui/icons-material/Lock'
 import WorkIcon from '@mui/icons-material/Work'
 
 const Signup = () => {
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(signupSchema),
   })
 
@@ -60,8 +64,16 @@ const Signup = () => {
               type='text'
               placeholder='Prénom'
               {...register('firstname')}
+              error={!!errors.firstname}
+              helperText={errors.firstname?.message}
             />
-            <StyledInput type='text' placeholder='Nom' {...register('name')} />
+            <StyledInput
+              type='text'
+              placeholder='Nom'
+              {...register('name')}
+              error={!!errors.name}
+              helperText={errors.name?.message}
+            />
           </NameWrapper>
           <StyledInput
             type='text'
@@ -74,6 +86,8 @@ const Signup = () => {
                 </InputAdornment>
               ),
             }}
+            error={!!errors.email}
+            helperText={errors.email?.message}
           />
           <StyledInput
             type='text'
@@ -86,6 +100,8 @@ const Signup = () => {
                 </InputAdornment>
               ),
             }}
+            error={!!errors.job}
+            helperText={errors.job?.message}
           />
           <StyledInput
             type='password'
@@ -98,6 +114,8 @@ const Signup = () => {
                 </InputAdornment>
               ),
             }}
+            error={!!errors.password}
+            helperText={errors.password?.message}
           />
           <StyledInput
             type='password'
@@ -110,8 +128,10 @@ const Signup = () => {
                 </InputAdornment>
               ),
             }}
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword?.message}
           />
-          <RoundedBtn>Créer mon compte</RoundedBtn>
+          <RoundedBtn type='submit'>Créer mon compte</RoundedBtn>
         </FormWrapper>
       </MainLayout>
     </>

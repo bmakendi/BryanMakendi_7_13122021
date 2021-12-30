@@ -19,7 +19,7 @@ export const FormWrapper = styled.form`
 `
 export const StyledInput = styled(TextField)`
   background-color: white;
-
+  position: relative;
   fieldset {
     border-radius: 10px;
     border-color: ${colors.grey};
@@ -31,6 +31,16 @@ export const StyledInput = styled(TextField)`
       font-size: 1.0625rem;
       opacity: 1;
     }
+  }
+  .MuiFormHelperText-root {
+    position: absolute;
+    bottom: -1rem;
+    margin-left: 0;
+    width: 100%;
+    font-size: 0.688rem;
+    font-weight: 500;
+    line-height: 13px;
+    letter-spacing: 0;
   }
 `
 export const StyledLink = styled(Link)`

@@ -1,28 +1,33 @@
 import * as yup from 'yup'
 
 export const loginSchema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().min(6).required(),
-})
-
-export const signupSchema = yup.object().shape({
   email: yup
     .string()
-    .email()
-    .required("L'adresse mail n'est pas au bon format"),
+    .email('Veuillez entrer une adresse mail valide')
+    .required('Veuillez entrer une adresse mail valide'),
+  password: yup.string().required('Veuillez entrer un mot de passe'),
+})
+
+/* Allowing one letter names and firstnames for the MVP */
+export const signupSchema = yup.object().shape({
+  firstname: yup.string().required('Veuillez entrer un prénom'),
+  name: yup.string().required('Veuillez entrer un nom'),
+  email: yup
+    .string()
+    .matches(
+      /^[a-z]+\.[a-z]+@\bgroupomania\b\.\bcom\b$/,
+      "L'adresse mail n'est pas au bon format"
+    )
+    .required('Veuillez entrer une adresse mail'),
+  job: yup.string().required('Veuillez indiquer votre emploi'),
   password: yup
     .string()
-    .min(6)
-    .required(
-      'Le mot de passe doit contenir au moins 6 caractères et 1 chiffre'
-    ),
+    .min(6, 'Le mot de passe doit contenir au moins 6 caractères et 1 chiffre')
+    .required('Veuillez entrer un mot de passe'),
   confirmPassword: yup
     .string()
     .oneOf(
       [yup.ref('password'), null],
       'Les mots de passe ne correspondent pas'
     ),
-  name: yup.string().min(2).required('Veuillez entrer un nom valide'),
-  firstname: yup.string().min(2).required('Veuillez entrer un prénom valide'),
-  job: yup.string().required('Veuillez indiquer votre emploi'),
 })
