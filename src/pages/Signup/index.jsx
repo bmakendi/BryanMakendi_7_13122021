@@ -11,7 +11,7 @@ import {
   FormWrapper,
   StyledInput,
 } from '../Login/style'
-import { NameWrapper } from './style'
+import { NameWrapper, SignupResult } from './style'
 import vector from '../../assets/form-background/topright_background.svg'
 import fullCircle from '../../assets/form-background/fullcircle.svg'
 import innerEllipse from '../../assets/form-background/inner_ellipse.svg'
@@ -21,6 +21,7 @@ import { InputAdornment } from '@mui/material'
 import EmailIcon from '@mui/icons-material/Email'
 import LockIcon from '@mui/icons-material/Lock'
 import WorkIcon from '@mui/icons-material/Work'
+import { useState } from 'react'
 
 const Signup = () => {
   const {
@@ -30,9 +31,35 @@ const Signup = () => {
   } = useForm({
     resolver: yupResolver(signupSchema),
   })
+  const [isLoading, setLoading] = useState(false)
+  const [clicked, setClicked] = useState(false)
+  const [resultText, setResultText] = useState('')
 
-  const submitForm = data => {
-    console.log('form data is : ', data)
+  console.log('loading? ' + isLoading + ' and clicked ? ' + clicked)
+  const submitForm = async formData => {
+    delete formData.confirmPassword
+    console.log('form data is : ', formData)
+    const body = formData
+    const apiRoute = 'http://localhost:8000/auth/signup'
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }
+    setLoading(true)
+    setClicked(true)
+    try {
+      const response = await fetch(apiRoute, requestOptions)
+      const data = await response.json()
+      if (data.error) setResultText('Adresse mail déjà utilisée')
+      else setResultText('Inscription réussie !')
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+      console.log('Grosse erreur ici là')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -54,6 +81,11 @@ const Signup = () => {
         zindex={-3}
       />
       <MainLayout>
+        {!isLoading && clicked ? (
+          <SignupResult error={resultText !== 'Inscription réussie !'}>
+            {resultText}
+          </SignupResult>
+        ) : null}
         <LogoWrapper>
           <img src={logo} alt='Logo Groupomania' />
           <img src={logoText} alt='Logo Groupomania' />

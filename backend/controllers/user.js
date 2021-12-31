@@ -4,6 +4,11 @@ const db = require('../models')
 const User = db.user
 const fs = require('fs')
 
+/* Making sure the first letter of the job is capitalized */
+const capitalizeFirstLetter = str => {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
 /**
  * Signing up leads to this function.
  * We use bcrypt to hide the user's password in the database, then we save the user's info.
@@ -22,16 +27,15 @@ exports.signup = (req, res, next) => {
       .send(new Error('Bad request at signup ! Check your entries.'))
   }
   let admin, job
+  job = capitalizeFirstLetter(req.body.job)
   if (
-    req.body.job.toLowerCase() === 'chargé de communication' ||
-    req.body.job.toLowerCase() === 'chargée de communication' ||
-    req.body.job.toLowerCase() === 'chargé.e de communication'
+    job === 'Chargé de communication' ||
+    job === 'Chargée de communication' ||
+    job === 'Chargé.e de communication'
   ) {
     admin = 1
-    job = req.body.job.toLowerCase()
   } else {
     admin = 0
-    job = req.body.job.toLowerCase()
   }
   bcrypt
     .hash(req.body.password, 10)
@@ -46,7 +50,7 @@ exports.signup = (req, res, next) => {
       })
         .then(() =>
           res.status(201).json({
-            message: 'Inscription réussie, utilisateur créé !',
+            message: 'Inscription réussie !',
           })
         )
         .catch(error => res.status(400).json({ error: error }))
