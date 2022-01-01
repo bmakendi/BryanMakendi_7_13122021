@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import colors from '../../utils/colors'
 
 export const MainLayout = styled.div`
-  padding: 0 1.81rem;
+  max-width: 330px;
+  margin: auto;
 `
 export const LogoWrapper = styled.div`
   display: flex;
@@ -56,11 +57,20 @@ export const TopRightDeco = styled.img`
   position: absolute;
   right: 0;
   top: 0;
+  max-width: ${({ mw }) => mw}px;
   z-index: -1;
+  @media all and (min-width: 760px) {
+    width: 50%;
+  }
+  @media all and (min-width: 1020) {
+    width: 60%;
+  }
 `
 export const BottomLeftDeco = styled.img`
   position: absolute;
   left: 0;
   bottom: 0;
+  width: ${({ w }) => w}%;
+  max-width: ${({ mw }) => mw}px;
   z-index: ${({ zindex }) => zindex};
 `

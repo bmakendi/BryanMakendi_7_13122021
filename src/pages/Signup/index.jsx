@@ -35,7 +35,6 @@ const Signup = () => {
   const [clicked, setClicked] = useState(false)
   const [resultText, setResultText] = useState('')
 
-  console.log('loading? ' + isLoading + ' and clicked ? ' + clicked)
   const submitForm = async formData => {
     delete formData.confirmPassword
     console.log('form data is : ', formData)
@@ -56,7 +55,6 @@ const Signup = () => {
       console.log(data)
     } catch (error) {
       console.log(error)
-      console.log('Grosse erreur ici là')
     } finally {
       setLoading(false)
     }
@@ -64,21 +62,27 @@ const Signup = () => {
 
   return (
     <>
-      <TopRightDeco src={vector} alt='Background decoration' />
+      <TopRightDeco src={vector} alt='Background decoration' mw={600} />
       <BottomLeftDeco
         src={fullCircle}
         alt='Background decoration'
-        zindex={-1}
+        zindex={1}
+        w={30}
+        mw={230}
       />
       <BottomLeftDeco
         src={innerEllipse}
         alt='Background decoration'
-        zindex={-2}
+        zindex={0}
+        w={37}
+        mw={284}
       />
       <BottomLeftDeco
         src={outerEllipse}
         alt='Background decoration'
-        zindex={-3}
+        zindex={-1}
+        w={45}
+        mw={345}
       />
       <MainLayout>
         {!isLoading && clicked ? (

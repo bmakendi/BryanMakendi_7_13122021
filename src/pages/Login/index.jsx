@@ -9,6 +9,7 @@ import {
   TopRightDeco,
   BottomLeftDeco,
 } from './style'
+import { SignupResult } from '../Signup/style'
 import RoundedBtn from '../../components/RoundedBtn'
 import { useForm } from 'react-hook-form'
 import { loginSchema } from '../../utils/schema'
@@ -20,8 +21,12 @@ import vector from '../../assets/form-background/topright_background.svg'
 import fullCircle from '../../assets/form-background/fullcircle.svg'
 import innerEllipse from '../../assets/form-background/inner_ellipse.svg'
 import outerEllipse from '../../assets/form-background/outer_ellipse.svg'
+import { UserContext } from '../../utils/context'
+import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router'
 
 const Login = () => {
+  localStorage.clear()
   const {
     register,
     handleSubmit,
@@ -29,31 +34,74 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(loginSchema),
   })
+  const { toggleLogged } = useContext(UserContext)
+  const [msg, setMsg] = useState('')
+  const navigate = useNavigate()
 
-  const submitForm = data => {
-    console.log('form data is : ', data)
+  const handleLogin = async ({ email, password }) => {
+    const body = { email, password }
+    const apiRoute = 'http://localhost:8000/auth/login'
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }
+    try {
+      const response = await fetch(apiRoute, requestOptions)
+      const data = await response.json()
+      console.log(data)
+      if (data.token) {
+        setMsg('')
+        localStorage.setItem('userId', JSON.stringify(data.userId))
+        localStorage.setItem('token', JSON.stringify(data.token))
+        console.log('connexion reussie')
+        toggleLogged()
+        setTimeout(() => {
+          navigate('/groupomania', { replace: true })
+        }, 1000)
+      } else {
+        setMsg(data.error)
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
     <>
-      <TopRightDeco src={vector} alt='Background decoration' />
-      <BottomLeftDeco src={fullCircle} alt='Background decoration' zindex={1} />
+      <TopRightDeco src={vector} alt='Background decoration' mw={600} />
+      <BottomLeftDeco
+        src={fullCircle}
+        alt='Background decoration'
+        zindex={1}
+        w={30}
+        mw={230}
+      />
       <BottomLeftDeco
         src={innerEllipse}
         alt='Background decoration'
         zindex={0}
+        w={37}
+        mw={284}
       />
       <BottomLeftDeco
         src={outerEllipse}
         alt='Background decoration'
         zindex={-1}
+        w={45}
+        mw={345}
       />
       <MainLayout>
+        {msg !== '' ? (
+          <SignupResult error={msg !== 'Utilisateur non trouvé !'}>
+            {msg}
+          </SignupResult>
+        ) : null}
         <LogoWrapper>
           <img src={logo} alt='Logo Groupomania' />
           <img src={logoText} alt='Logo Groupomania' />
         </LogoWrapper>
-        <FormWrapper onSubmit={handleSubmit(submitForm)}>
+        <FormWrapper onSubmit={handleSubmit(handleLogin)}>
           <StyledInput
             type='text'
             placeholder='Adresse e-mail'
