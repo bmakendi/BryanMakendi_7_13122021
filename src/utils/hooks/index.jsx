@@ -1,30 +1,47 @@
 import { useState, useEffect } from 'react'
 
-export const useSignup = (url, body) => {
-  const [data, setData] = useState({})
+export const useFetchArticles = url => {
+  const [data, setData] = useState([])
   const [error, setError] = useState(false)
   const [isLoading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!url || !body) return
     setLoading(true)
-    const fetchData = async () => {
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type/': 'application/json' },
-          body: JSON.stringify(body),
-        })
-        const data = await response.json()
+    fetch(url)
+      .then(res => {
+        return res.json()
+      })
+      .then(data => {
         setData(data)
-      } catch (err) {
+        setLoading(false)
+      })
+      .catch(err => {
         console.log(err)
         setError(true)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [url, body])
+      })
+  }, [url])
   return { isLoading, data, error }
+}
+
+export const useFetchUser = url => {
+  const [user, setUser] = useState([])
+  const [userError, setUserError] = useState(false)
+  const [userLoading, setUserLoading] = useState(true)
+
+  useEffect(() => {
+    setUserLoading(true)
+    fetch(url)
+      .then(res => {
+        return res.json()
+      })
+      .then(data => {
+        setUser(data)
+        setUserLoading(false)
+      })
+      .catch(err => {
+        console.log(err)
+        setUserError(true)
+      })
+  }, [url])
+  return { userLoading, user, userError }
 }

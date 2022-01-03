@@ -18,7 +18,9 @@ export const ThemeProvider = ({ children }) => {
 export const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
-  const [isLogged, setIsLogged] = useState(false)
+  const [isLogged, setIsLogged] = useState(
+    localStorage.getItem('loggedIn') === 'true'
+  )
   const toggleLogged = () => {
     setIsLogged(localStorage.length < 2 ? false : true)
   }

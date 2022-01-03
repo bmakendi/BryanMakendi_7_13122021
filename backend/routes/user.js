@@ -17,6 +17,6 @@ router.put('/:id', auth, multer, userCtrl.modifyUser)
 router.delete('/:id', auth, userCtrl.deleteUser)
 
 //When you go on a user's profile, a request gets sent to this path
-router.get('/:id', auth, userCtrl.getUser)
+router.get('/:id', userCtrl.getUser)
 
 module.exports = router

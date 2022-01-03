@@ -24,9 +24,9 @@ import outerEllipse from '../../assets/form-background/outer_ellipse.svg'
 import { UserContext } from '../../utils/context'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { useEffect } from 'react'
 
 const Login = () => {
-  localStorage.clear()
   const {
     register,
     handleSubmit,
@@ -34,9 +34,14 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(loginSchema),
   })
-  const { toggleLogged } = useContext(UserContext)
+  const { isLogged, toggleLogged } = useContext(UserContext)
   const [msg, setMsg] = useState('')
   const navigate = useNavigate()
+
+  console.log('is user logged ? ', isLogged)
+  useEffect(() => {
+    isLogged && navigate('/groupomania', { replace: true })
+  }, [isLogged, navigate])
 
   const handleLogin = async ({ email, password }) => {
     const body = { email, password }
@@ -54,8 +59,9 @@ const Login = () => {
         setMsg('')
         localStorage.setItem('userId', JSON.stringify(data.userId))
         localStorage.setItem('token', JSON.stringify(data.token))
-        console.log('connexion reussie')
+        console.log('Connexion réussie')
         toggleLogged()
+        localStorage.setItem('loggedIn', 'true')
         setTimeout(() => {
           navigate('/groupomania', { replace: true })
         }, 1000)

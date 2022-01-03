@@ -10,7 +10,7 @@ router.post('/', auth, articleCtrl.postArticle)
 router.put('/:id', auth, articleCtrl.modifyArticle)
 
 //Fetching all articles sends a request to this path
-router.get('/', auth, articleCtrl.getArticles)
+router.get('/', articleCtrl.getArticles)
 
 //Fetching one article sends a request to this path
 router.get('/:id', auth, articleCtrl.getOneArticle)
