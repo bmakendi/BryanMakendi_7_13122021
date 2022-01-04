@@ -110,7 +110,7 @@ const Post = ({
             <UserInfo>
               <UserName>{fullname}</UserName>
               <SubInfo>
-                <Admin admin={admin === true}>Modérateur •</Admin>
+                <Admin admin={admin === true}>Modérateur • </Admin>
                 <Date>{formattedDate}</Date>
               </SubInfo>
             </UserInfo>

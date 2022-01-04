@@ -12,6 +12,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useFetchArticles, useFetchUser } from '../../utils/hooks'
 import Post from '../../components/Post'
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 const Home = () => {
   const [filter, setFilter] = useState('newest')
@@ -68,7 +69,9 @@ const Home = () => {
             )
           })}
         </PostsContainer>
-        <AddPostBtn>Ajouter un post</AddPostBtn>
+        <Link to='/groupomania/create-post'>
+          <AddPostBtn>Ajouter un post</AddPostBtn>
+        </Link>
       </MainWrapper>
     </>
   )

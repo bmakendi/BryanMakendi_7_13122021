@@ -4,20 +4,20 @@ import Select from '@mui/material/Select'
 import RoundedBtn from '../../components/RoundedBtn'
 
 export const MainWrapper = styled.main`
-  padding: 20px 29px;
+  padding: 34px 29px;
 `
 export const Filters = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
   p {
-    font-weight: 600;
+    font-weight: 500;
   }
 `
 export const StyledSelect = styled(Select)`
   div {
     padding: 9px 20px;
-    font-weight: 500;
+    font-weight: 400;
   }
 
   fieldset {
@@ -26,13 +26,13 @@ export const StyledSelect = styled(Select)`
   }
 `
 export const AddPostBtn = styled(RoundedBtn)`
-  position: absolute;
-  bottom: 0;
+  position: fixed;
+  bottom: 24px;
   width: 250px;
   left: 0;
   right: 0;
-  margin-left: auto;
   margin-right: auto;
+  margin-left: auto;
   font-size: 1rem;
   background-color: ${colors.postBtn};
   opacity: 0.75;

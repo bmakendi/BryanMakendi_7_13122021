@@ -6,7 +6,9 @@ import SearchIcon from '@mui/icons-material/Search'
 import PropTypes from 'prop-types'
 import DefaultPicture from '../../assets/images/profile.png'
 import { Options, OptionItem } from '../Options'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { UserContext } from '../../utils/context'
+import { useNavigate } from 'react-router'
 import PersonIcon from '@mui/icons-material/Person'
 import LogoutIcon from '@mui/icons-material/Logout'
 
@@ -49,6 +51,16 @@ const Menu = styled.div`
 `
 const Header = ({ picture }) => {
   const [open, setOpen] = useState(false)
+  const { isLogged, toggleLogged } = useContext(UserContext)
+  const navigate = useNavigate()
+
+  const logOut = () => {
+    localStorage.clear()
+    toggleLogged()
+  }
+
+  useEffect(() => {}, [isLogged, navigate])
+
   return (
     <StyledHeader>
       <img src={Logo} alt='Logo de Groupomania' />
@@ -75,7 +87,7 @@ const Header = ({ picture }) => {
               <PersonIcon />
               Mon profil
             </OptionItem>
-            <OptionItem menu={true}>
+            <OptionItem menu={true} onClick={logOut}>
               <LogoutIcon />
               Se déconnecter
             </OptionItem>

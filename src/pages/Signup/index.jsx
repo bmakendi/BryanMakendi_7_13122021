@@ -21,7 +21,9 @@ import { InputAdornment } from '@mui/material'
 import EmailIcon from '@mui/icons-material/Email'
 import LockIcon from '@mui/icons-material/Lock'
 import WorkIcon from '@mui/icons-material/Work'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router'
+import { UserContext } from '../../utils/context'
 
 const Signup = () => {
   const {
@@ -34,6 +36,37 @@ const Signup = () => {
   const [isLoading, setLoading] = useState(false)
   const [clicked, setClicked] = useState(false)
   const [resultText, setResultText] = useState('')
+  const { toggleLogged } = useContext(UserContext)
+  const navigate = useNavigate()
+
+  const handleLogin = async (email, password) => {
+    const body = { email, password }
+    const apiRoute = 'http://localhost:8000/auth/login'
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }
+    try {
+      const response = await fetch(apiRoute, requestOptions)
+      const data = await response.json()
+      console.log(data)
+      if (data.token) {
+        localStorage.setItem('userId', JSON.stringify(data.userId))
+        localStorage.setItem('token', JSON.stringify(data.token))
+        console.log('Connexion réussie')
+        toggleLogged()
+        localStorage.setItem('loggedIn', 'true')
+        setTimeout(() => {
+          navigate('/groupomania', { replace: true })
+        }, 1000)
+      } else {
+        console.log('Error ', data.error)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   const submitForm = async formData => {
     delete formData.confirmPassword
@@ -51,7 +84,10 @@ const Signup = () => {
       const response = await fetch(apiRoute, requestOptions)
       const data = await response.json()
       if (data.error) setResultText('Adresse mail déjà utilisée')
-      else setResultText('Inscription réussie !')
+      else {
+        setResultText('Inscription réussie !')
+        handleLogin(formData.email, formData.password)
+      }
       console.log(data)
     } catch (error) {
       console.log(error)
