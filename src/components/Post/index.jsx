@@ -58,10 +58,12 @@ const PostText = styled.div`
 const PostTitle = styled.p`
   font-weight: 500;
   margin-bottom: 14px;
+  max-height: 3.5625rem;
 `
 const PostContent = styled.p`
   font-size: 0.9375rem;
   margin-bottom: 29px;
+  max-height: 2.5rem;
 `
 const Interactions = styled.div`
   display: flex;

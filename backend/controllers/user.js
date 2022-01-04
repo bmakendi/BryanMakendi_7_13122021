@@ -31,7 +31,13 @@ exports.signup = (req, res, next) => {
   if (
     job === 'Chargé de communication' ||
     job === 'Chargée de communication' ||
-    job === 'Chargé.e de communication'
+    job === 'Chargé.e de communication' ||
+    job === 'Chargé.e de comm' ||
+    job === 'Chargé de comm' ||
+    job === 'Chargée de comm' ||
+    job === 'Chargée de com' ||
+    job === 'Chargé de com' ||
+    job === 'Chargé.e de com'
   ) {
     admin = 1
   } else {

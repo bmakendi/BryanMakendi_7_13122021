@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
         validate: {
           isEmail: true,
         },
@@ -46,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
           attributes: { exclude: ['password'] },
         },
       },
+      indexes: [{ unique: true, fields: ['email'] }],
     }
   )
   return User

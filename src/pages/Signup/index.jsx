@@ -11,7 +11,7 @@ import {
   FormWrapper,
   StyledInput,
 } from '../Login/style'
-import { NameWrapper, SignupResult } from './style'
+import { NameWrapper, ResultMsg } from './style'
 import vector from '../../assets/form-background/topright_background.svg'
 import fullCircle from '../../assets/form-background/fullcircle.svg'
 import innerEllipse from '../../assets/form-background/inner_ellipse.svg'
@@ -121,11 +121,7 @@ const Signup = () => {
         mw={345}
       />
       <MainLayout>
-        {!isLoading && clicked ? (
-          <SignupResult error={resultText !== 'Inscription réussie !'}>
-            {resultText}
-          </SignupResult>
-        ) : null}
+        {!isLoading && clicked ? <ResultMsg>{resultText}</ResultMsg> : null}
         <LogoWrapper>
           <img src={logo} alt='Logo Groupomania' />
           <img src={logoText} alt='Logo Groupomania' />
@@ -203,7 +199,9 @@ const Signup = () => {
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword?.message}
           />
-          <RoundedBtn type='submit'>Créer mon compte</RoundedBtn>
+          <RoundedBtn type='submit' disabled={isLoading}>
+            Créer mon compte
+          </RoundedBtn>
         </FormWrapper>
       </MainLayout>
     </>

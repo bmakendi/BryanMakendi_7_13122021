@@ -2,7 +2,6 @@
 const express = require('express')
 const userRoutes = require('./routes/user')
 const articleRoutes = require('./routes/article')
-const commentRoutes = require('./routes/comment')
 const likeRoutes = require('./routes/like')
 const app = express()
 
@@ -26,7 +25,6 @@ app.use(express.json())
 //User request will end up on these routes
 app.use('/auth', userRoutes)
 app.use('/articles', articleRoutes)
-app.use('/comments', commentRoutes)
 app.use('/likes', likeRoutes)
 app.get('/', (req, res) => {
   return res.status(200).json({ message: 'hello world' })

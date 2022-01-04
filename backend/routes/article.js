@@ -18,4 +18,9 @@ router.get('/:id', auth, articleCtrl.getOneArticle)
 //Deleting an article sends a request to this path
 router.delete('/:id', auth, articleCtrl.deleteArticle)
 
+//COMMENTS
+
+router.post('/comments', auth, articleCtrl.postComment)
+router.get('/:articleId/comments', articleCtrl.getComments)
+
 module.exports = router

@@ -33,6 +33,7 @@ export const AddPostBtn = styled(RoundedBtn)`
   right: 0;
   margin-right: auto;
   margin-left: auto;
+  margin-bottom: 0;
   font-size: 1rem;
   background-color: ${colors.postBtn};
   opacity: 0.75;

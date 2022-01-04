@@ -8,14 +8,21 @@ export const NameWrapper = styled.div`
     padding-left: 14px;
   }
 `
-export const SignupResult = styled.div`
+export const ResultMsg = styled.div`
   border-radius: 15px;
   background-color: ${colors.blue};
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   box-shadow: 4px 6px 6px ${colors.lightblue};
   opacity: 0.6;
   position: absolute;
-  top: 5rem;
-  left: ${({ error }) => (error ? '23%' : '30%')};
+  width: 250px;
+  left: 0;
+  right: 0;
+  top: 5.5rem;
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
   padding: 1rem;
   color: #fff;
 `

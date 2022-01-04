@@ -9,7 +9,7 @@ import {
   TopRightDeco,
   BottomLeftDeco,
 } from './style'
-import { SignupResult } from '../Signup/style'
+import { ResultMsg } from '../Signup/style'
 import RoundedBtn from '../../components/RoundedBtn'
 import { useForm } from 'react-hook-form'
 import { loginSchema } from '../../utils/schema'
@@ -22,9 +22,8 @@ import fullCircle from '../../assets/form-background/fullcircle.svg'
 import innerEllipse from '../../assets/form-background/inner_ellipse.svg'
 import outerEllipse from '../../assets/form-background/outer_ellipse.svg'
 import { UserContext } from '../../utils/context'
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { useEffect } from 'react'
 
 const Login = () => {
   const {
@@ -99,9 +98,9 @@ const Login = () => {
       />
       <MainLayout>
         {msg !== '' ? (
-          <SignupResult error={msg !== 'Utilisateur non trouvé !'}>
+          <ResultMsg error={msg !== 'Utilisateur non trouvé !'}>
             {msg}
-          </SignupResult>
+          </ResultMsg>
         ) : null}
         <LogoWrapper>
           <img src={logo} alt='Logo Groupomania' />
