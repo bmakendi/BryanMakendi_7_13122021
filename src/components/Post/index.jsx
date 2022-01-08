@@ -7,7 +7,7 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { IconButton } from '@mui/material'
+import { IconButton, TextareaAutosize } from '@mui/material'
 import { useState } from 'react'
 import { Options, OptionItem } from '../../components/Options'
 
@@ -36,8 +36,8 @@ const UserDisplay = styled.div`
   margin-bottom: 15px;
 `
 const UserPicture = styled.img`
-  width: 2.5rem;
-  height: 2.5rem;
+  width: ${({ comment }) => (comment ? '2.25rem' : '2.5rem')};
+  height: ${({ comment }) => (comment ? '2.25rem' : '2.5rem')};
 `
 const UserInfo = styled.div``
 const UserName = styled.p`
@@ -54,6 +54,7 @@ const Date = styled.span`
 `
 const PostText = styled.div`
   max-height: 6.625rem;
+  margin-bottom: 1.25rem;
 `
 const PostTitle = styled.p`
   font-weight: 500;
@@ -62,7 +63,6 @@ const PostTitle = styled.p`
 `
 const PostContent = styled.p`
   font-size: 0.9375rem;
-  margin-bottom: 29px;
   max-height: 2.5rem;
 `
 const Interactions = styled.div`
@@ -86,6 +86,30 @@ const MoreIcon = styled(IconButton)`
 `
 const PostOptions = styled.div`
   position: relative;
+`
+const CommentSection = styled.div`
+  display: flex;
+  max-width: 100%;
+  gap: 5px;
+  margin-top: 0.9375rem;
+`
+const CommentInput = styled(TextareaAutosize)`
+  padding: 0.8125rem 0.625rem;
+  width: 17.625rem;
+  min-height: 2.5rem;
+  max-height: 2.5rem;
+  border: 1px solid ${colors.lightgrey};
+  border-radius: 30px;
+  font-family: 'Roboto';
+  font-size: 0.9375rem;
+  &::placeholder {
+    position: absolute;
+    color: ${colors.iconGrey};
+    opacity: 1;
+    font-family: 'Roboto';
+    font-size: 0.9375rem;
+    top: 10px;
+  }
 `
 
 const Post = ({
@@ -150,6 +174,15 @@ const Post = ({
             <ChatBubbleIcon />
           </CommentIcon>
         </Interactions>
+        <CommentSection>
+          <UserPicture
+            comment={true}
+            src={
+              currentUser.pictureUrl ? currentUser.pictureUrl : DefaultPicture
+            }
+          />
+          <CommentInput placeholder='Ajouter une réponse' />
+        </CommentSection>
       </PostWrapper>
     </>
   )
