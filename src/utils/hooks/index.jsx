@@ -45,3 +45,23 @@ export const useFetchUser = url => {
   }, [url])
   return { userLoading, user, userError }
 }
+
+export const useFetchComments = url => {
+  const [comments, setComments] = useState([])
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    fetch(url)
+      .then(res => {
+        return res.json()
+      })
+      .then(data => {
+        setComments(data)
+      })
+      .catch(err => {
+        console.log(err)
+        setError(true)
+      })
+  }, [url])
+  return { comments, error }
+}

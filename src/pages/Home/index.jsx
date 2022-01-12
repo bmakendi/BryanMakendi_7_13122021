@@ -15,7 +15,7 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const Home = () => {
-  const [filter, setFilter] = useState('newest')
+  const [filter, setFilter] = useState('oldest')
   const [currentUser, setCurrentUser] = useState({})
   const { user, userLoading, userError } = useFetchUser(
     'http://localhost:8000/auth/' + localStorage.getItem('userId')
@@ -23,8 +23,14 @@ const Home = () => {
   const { data, isLoading, error } = useFetchArticles(
     'http://localhost:8000/articles/'
   )
+
+  const sortFilter = (a, b) => {
+    return filter === 'oldest' ? b.id - a.id : a.id - b.id
+  }
+
   const toggleFilter = () => {
     setFilter(filter === 'newest' ? 'oldest' : 'newest')
+    data.sort(sortFilter)
   }
 
   console.log('data ', data, 'loading ? ', isLoading, 'error ? ', error)
@@ -47,8 +53,8 @@ const Home = () => {
             inputProps={{ 'aria-label': 'Without label' }}
             IconComponent={KeyboardArrowDownIcon}
           >
-            <MenuItem value={'newest'}>Du plus récent</MenuItem>
             <MenuItem value={'oldest'}>Du plus ancien</MenuItem>
+            <MenuItem value={'newest'}>Du plus récent</MenuItem>
           </StyledSelect>
         </Filters>
         <PostsContainer>
@@ -56,6 +62,7 @@ const Home = () => {
             return (
               <Post
                 key={article.id}
+                articleId={article.id}
                 title={article.title}
                 content={article.content}
                 firstname={article.User.firstname}

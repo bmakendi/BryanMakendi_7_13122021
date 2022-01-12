@@ -44,22 +44,18 @@ exports.getOneArticle = (req, res, next) => {}
 exports.deleteArticle = (req, res, next) => {}
 
 exports.postComment = (req, res, next) => {
-  if (
-    !req.body.comment.content ||
-    !req.body.userId ||
-    !req.body.firstname ||
-    !req.body.name ||
-    !req.body.articleId
-  ) {
+  if (!req.body.comment.content || !req.body.userId || !req.params.articleId) {
     return res.status(400).send(new Error('Bad request !'))
   }
-  Comment.create({
+  const comment = new Comment({
     content: req.body.comment.content,
     firstname: req.body.firstname,
     name: req.body.name,
     UserId: req.body.userId,
-    ArticleId: req.body.articleId,
+    ArticleId: req.params.articleId,
   })
+  comment
+    .save()
     .then(() => res.status(201).json({ message: 'Commentaire posté !' }))
     .catch(error =>
       res.status(400).json({
@@ -69,4 +65,15 @@ exports.postComment = (req, res, next) => {
     )
 }
 
-exports.getComments = (req, res, next) => {}
+exports.getComments = (req, res, next) => {
+  if (!req.params.articleId) {
+    return res
+      .status(400)
+      .send(new Error('Bad request ! Need an id in parameters.'))
+  }
+  Comment.findAll({ where: { ArticleId: req.params.articleId } })
+    .then(comments => res.status(200).json(comments))
+    .catch(error =>
+      res.status(404).json({ message: 'Aucun commentaire de trouvé.', error })
+    )
+}

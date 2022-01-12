@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Home from './pages/Home'
 import AddPost from './pages/AddPost'
+import Profile from './pages/Profile'
 import { ThemeProvider, UserProvider } from './utils/context'
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
             <Route element={<ProtectedRoutes />}>
               <Route path='/groupomania' element={<Home />} />
               <Route path='/groupomania/create-post' element={<AddPost />} />
+              <Route path='/profile' element={<Profile />} />
             </Route>
           </Routes>
         </UserProvider>

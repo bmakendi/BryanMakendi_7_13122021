@@ -9,6 +9,7 @@ import { Options, OptionItem } from '../Options'
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../utils/context'
 import { useNavigate } from 'react-router'
+import { Link } from 'react-router-dom'
 import PersonIcon from '@mui/icons-material/Person'
 import LogoutIcon from '@mui/icons-material/Logout'
 
@@ -53,6 +54,7 @@ const Header = ({ picture }) => {
   const [open, setOpen] = useState(false)
   const { isLogged, toggleLogged } = useContext(UserContext)
   const navigate = useNavigate()
+  const id = localStorage.getItem('userId')
 
   const logOut = () => {
     localStorage.clear()
@@ -83,10 +85,12 @@ const Header = ({ picture }) => {
         />
         {open && (
           <Options menu={true}>
-            <OptionItem topOption={true}>
-              <PersonIcon />
-              Mon profil
-            </OptionItem>
+            <Link to={`/profile?id=${id}`}>
+              <OptionItem topOption={true}>
+                <PersonIcon />
+                Mon profil
+              </OptionItem>
+            </Link>
             <OptionItem menu={true} onClick={logOut}>
               <LogoutIcon />
               Se déconnecter

@@ -4,7 +4,7 @@ import Select from '@mui/material/Select'
 import RoundedBtn from '../../components/RoundedBtn'
 
 export const MainWrapper = styled.main`
-  padding: 34px 29px;
+  padding: 2.125rem 1.8125rem;
 `
 export const Filters = styled.div`
   display: flex;

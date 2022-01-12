@@ -7,9 +7,12 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import SendIcon from '@mui/icons-material/Send'
 import { IconButton, TextareaAutosize } from '@mui/material'
 import { useState } from 'react'
 import { Options, OptionItem } from '../../components/Options'
+import { useFetchComments } from '../../utils/hooks'
+import { Link } from 'react-router-dom'
 
 const PostWrapper = styled.article`
   padding: 36px 0 21px;
@@ -89,13 +92,14 @@ const PostOptions = styled.div`
 `
 const CommentSection = styled.div`
   display: flex;
+  align-items: center;
   max-width: 100%;
   gap: 5px;
   margin-top: 0.9375rem;
 `
 const CommentInput = styled(TextareaAutosize)`
   padding: 0.8125rem 0.625rem;
-  width: 17.625rem;
+  width: 14.7rem;
   min-height: 2.5rem;
   max-height: 2.5rem;
   border: 1px solid ${colors.lightgrey};
@@ -111,8 +115,24 @@ const CommentInput = styled(TextareaAutosize)`
     top: 10px;
   }
 `
+const SendBtn = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${colors.grey};
+  background-color: ${colors.lightgrey};
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 100%;
+  cursor: pointer;
+  &:hover {
+    color: ${colors.blue};
+    background-color: ${colors.lightblue};
+  }
+`
 
 const Post = ({
+  articleId,
   title,
   content,
   firstname,
@@ -124,9 +144,46 @@ const Post = ({
   currentUser,
 }) => {
   const [open, setOpen] = useState(false)
+  const [comment, setComment] = useState('')
+  const { comments, error } = useFetchComments(
+    `http://localhost:8000/articles/${articleId}/comments`
+  )
   const fullname = firstname + ' ' + name
   const pic = picture ? picture : DefaultPicture
   const formattedDate = date.slice(0, 10)
+
+  console.log(`article ${articleId} comments: `, comments, error)
+  console.log('commentaire à envoyer: ' + comment)
+
+  const sendComment = async comment => {
+    if (comment || comment !== '') {
+      const userId = localStorage.getItem('userId')
+      const token = localStorage.getItem('token').replace(/['"]+/g, '')
+      const bearer = 'Bearer ' + token
+      const body = {
+        userId: userId,
+        firstname: firstname,
+        name: name,
+        comment: {
+          content: comment,
+        },
+      }
+      const url = `http://localhost:8000/articles/${articleId}/comments`
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: bearer },
+        body: JSON.stringify(body),
+      }
+      try {
+        const response = await fetch(url, requestOptions)
+        const data = await response.json()
+        console.log(data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
+
   return (
     <>
       <PostWrapper>
@@ -134,7 +191,9 @@ const Post = ({
           <UserDisplay>
             <UserPicture src={pic} alt='Créateur du post' />
             <UserInfo>
-              <UserName>{fullname}</UserName>
+              <Link to={`/profile?id=${postCreator}`}>
+                <UserName>{fullname}</UserName>
+              </Link>
               <SubInfo>
                 <Admin admin={admin === true}>Modérateur • </Admin>
                 <Date>{formattedDate}</Date>
@@ -181,7 +240,13 @@ const Post = ({
               currentUser.pictureUrl ? currentUser.pictureUrl : DefaultPicture
             }
           />
-          <CommentInput placeholder='Ajouter une réponse' />
+          <CommentInput
+            placeholder='Ajouter une réponse'
+            onBlur={e => setComment(e.target.value)}
+          />
+          <SendBtn onClick={() => sendComment(comment)}>
+            <SendIcon />
+          </SendBtn>
         </CommentSection>
       </PostWrapper>
     </>
