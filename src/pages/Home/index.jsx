@@ -11,12 +11,13 @@ import MenuItem from '@mui/material/MenuItem'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useFetchArticles, useFetchUser } from '../../utils/hooks'
 import Post from '../../components/Post'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { CurrentUserContext } from '../../utils/context'
 
 const Home = () => {
   const [filter, setFilter] = useState('oldest')
-  const [currentUser, setCurrentUser] = useState({})
+  const { currentUser, updateCurrentUser } = useContext(CurrentUserContext)
   const { user, userLoading, userError } = useFetchUser(
     'http://localhost:8000/auth/' + localStorage.getItem('userId')
   )
@@ -33,12 +34,11 @@ const Home = () => {
     data.sort(sortFilter)
   }
 
-  console.log('data ', data, 'loading ? ', isLoading, 'error ? ', error)
-
   useEffect(() => {
-    !userLoading && setCurrentUser(user)
+    !userLoading && updateCurrentUser(user)
+    localStorage.setItem('currentUser', JSON.stringify(currentUser))
     console.log('current user: ', currentUser, 'Error ? ', userError)
-  }, [currentUser, user, userLoading, userError])
+  }, [currentUser, user, userLoading, userError, updateCurrentUser])
 
   return (
     <>

@@ -15,6 +15,20 @@ export const ThemeProvider = ({ children }) => {
   )
 }
 
+export const CurrentUserContext = createContext()
+
+export const CurrentUserProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState({})
+  const updateCurrentUser = user => {
+    setCurrentUser(user)
+  }
+  return (
+    <CurrentUserContext.Provider value={{ currentUser, updateCurrentUser }}>
+      {children}
+    </CurrentUserContext.Provider>
+  )
+}
+
 export const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {

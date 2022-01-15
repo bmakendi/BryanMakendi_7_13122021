@@ -125,7 +125,7 @@ exports.modifyUser = (req, res, next) => {
           message: 'Erreur lors de la modification de la photo : ' + error,
         })
       )
-  } else {
+  } else if (req.body.job) {
     User.update({ job: req.body.job }, { where: { id: req.body.userId } })
       .then(() => res.status(200).json({ message: 'Job bien modifié !' }))
       .catch(error =>

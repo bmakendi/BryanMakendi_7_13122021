@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import DefaultPicture from '../../assets/images/profile.png'
 import { Options, OptionItem } from '../Options'
 import { useContext, useEffect, useState } from 'react'
-import { UserContext } from '../../utils/context'
+import { CurrentUserContext, UserContext } from '../../utils/context'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import PersonIcon from '@mui/icons-material/Person'
@@ -53,11 +53,13 @@ const Menu = styled.div`
 const Header = ({ picture }) => {
   const [open, setOpen] = useState(false)
   const { isLogged, toggleLogged } = useContext(UserContext)
+  const { updateCurrentUser } = useContext(CurrentUserContext)
   const navigate = useNavigate()
   const id = localStorage.getItem('userId')
 
   const logOut = () => {
     localStorage.clear()
+    updateCurrentUser({})
     toggleLogged()
   }
 
@@ -85,8 +87,8 @@ const Header = ({ picture }) => {
         />
         {open && (
           <Options menu={true}>
-            <Link to={`/profile?id=${id}`}>
-              <OptionItem topOption={true}>
+            <Link to={`/profile/${id}`}>
+              <OptionItem topOption={true} onClick={() => setOpen(!open)}>
                 <PersonIcon />
                 Mon profil
               </OptionItem>

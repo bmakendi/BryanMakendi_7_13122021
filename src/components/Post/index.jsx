@@ -153,7 +153,6 @@ const Post = ({
   const formattedDate = date.slice(0, 10)
 
   console.log(`article ${articleId} comments: `, comments, error)
-  console.log('commentaire à envoyer: ' + comment)
 
   const sendComment = async comment => {
     if (comment || comment !== '') {
@@ -191,7 +190,7 @@ const Post = ({
           <UserDisplay>
             <UserPicture src={pic} alt='Créateur du post' />
             <UserInfo>
-              <Link to={`/profile?id=${postCreator}`}>
+              <Link to={`/profile/${postCreator}`}>
                 <UserName>{fullname}</UserName>
               </Link>
               <SubInfo>

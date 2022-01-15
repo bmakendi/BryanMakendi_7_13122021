@@ -5,6 +5,8 @@ import RoundedBtn from '../../components/RoundedBtn'
 
 export const MainWrapper = styled.main`
   padding: 2.125rem 1.8125rem;
+  border-bottom: ${({ page }) =>
+    page === 'profile' && `1px solid ${colors.lightgrey}`};
 `
 export const Filters = styled.div`
   display: flex;

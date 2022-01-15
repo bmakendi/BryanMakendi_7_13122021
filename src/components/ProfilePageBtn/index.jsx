@@ -5,6 +5,8 @@ export const ProfileBtn = styled.div`
   width: ${({ deleteBtn }) => (deleteBtn ? '12.0625rem' : '11rem')};
   height: ${({ deleteBtn }) => (deleteBtn ? '2.875rem' : '2.5rem')};
   padding: ${({ deleteBtn }) => !deleteBtn && '0 0.8125rem 0 0.375rem'};
+  margin: ${({ deleteBtn }) => deleteBtn && 'auto'};
+  margin-top: ${({ deleteBtn }) => deleteBtn && '3.1875rem'};
   display: flex;
   align-items: center;
   justify-content: ${({ deleteBtn }) =>
@@ -17,4 +19,5 @@ export const ProfileBtn = styled.div`
   &:hover {
     border-color: ${({ deleteBtn }) => deleteBtn && colors.red};
   }
+  cursor: pointer;
 `
