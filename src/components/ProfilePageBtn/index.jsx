@@ -19,5 +19,9 @@ export const ProfileBtn = styled.div`
   &:hover {
     border-color: ${({ deleteBtn }) => deleteBtn && colors.red};
   }
+  & > * {
+    display: flex;
+    align-items: center;
+  }
   cursor: pointer;
 `

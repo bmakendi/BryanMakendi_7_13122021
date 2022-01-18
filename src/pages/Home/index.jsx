@@ -14,6 +14,7 @@ import Post from '../../components/Post'
 import { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CurrentUserContext } from '../../utils/context'
+import { HomepageLoading } from '../../components/Loading'
 
 const Home = () => {
   const [filter, setFilter] = useState('oldest')
@@ -58,23 +59,27 @@ const Home = () => {
           </StyledSelect>
         </Filters>
         <PostsContainer>
-          {data.map(article => {
-            return (
-              <Post
-                key={article.id}
-                articleId={article.id}
-                title={article.title}
-                content={article.content}
-                firstname={article.User.firstname}
-                name={article.User.name}
-                admin={article.User.admin}
-                date={article.createdAt}
-                picture={article.User.pictureUrl}
-                postCreator={article.UserId}
-                currentUser={currentUser}
-              />
-            )
-          })}
+          {isLoading ? (
+            <HomepageLoading />
+          ) : (
+            data.map(article => {
+              return (
+                <Post
+                  key={article.id}
+                  articleId={article.id}
+                  title={article.title}
+                  content={article.content}
+                  firstname={article.User.firstname}
+                  name={article.User.name}
+                  admin={article.User.admin}
+                  date={article.createdAt}
+                  picture={article.User.pictureUrl}
+                  postCreator={article.UserId}
+                  currentUser={currentUser}
+                />
+              )
+            })
+          )}
         </PostsContainer>
         <Link to='/groupomania/create-post'>
           <AddPostBtn>Ajouter un post</AddPostBtn>

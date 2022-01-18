@@ -48,12 +48,12 @@ const Profile = () => {
   const handleFileUpload = async data => {
     const token = localStorage.getItem('token').replace(/['"]+/g, '')
     const bearer = 'Bearer ' + token
-    data.append('userId', id)
     const requestOptions = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: bearer },
       data,
     }
+    console.log(data)
     try {
       const response = await fetch(
         `http://localhost:8000/auth/${id}`,
@@ -62,7 +62,7 @@ const Profile = () => {
       const data = await response.json()
       console.log(data)
     } catch (err) {
-      console.log(err)
+      console.log(err, '???')
     }
   }
 
@@ -70,12 +70,13 @@ const Profile = () => {
     <>
       <Header picture={user.pictureUrl} />
       <MainWrapper page='profile'>
-        <Link to='/groupomania'>
-          <ProfileBtn>
+        <ProfileBtn>
+          <Link to='/groupomania'>
             <ChevronLeftIcon />
             <span>Retourner au forum</span>
-          </ProfileBtn>
-        </Link>
+          </Link>
+        </ProfileBtn>
+
         {(currentUsersPage || usersPageIsAdmin) && (
           <ProfileTitle>
             <h1 className='title'>{currentUsersPage && 'Mon profil'}</h1>

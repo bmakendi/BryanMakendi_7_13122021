@@ -10,6 +10,7 @@ import {
   ThemeProvider,
   UserProvider,
 } from './utils/context'
+import ErrorPage from './pages/ErrorPage'
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
                 <Route path='/groupomania/create-post' element={<AddPost />} />
                 <Route path='/profile/:id' element={<Profile />} />
               </Route>
+              <Route path='*' element={<ErrorPage />} />
             </Routes>
           </UserProvider>
         </CurrentUserProvider>

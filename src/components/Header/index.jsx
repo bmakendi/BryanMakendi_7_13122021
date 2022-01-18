@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import PersonIcon from '@mui/icons-material/Person'
 import LogoutIcon from '@mui/icons-material/Logout'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
 
 const StyledHeader = styled.header`
   display: flex;
@@ -63,6 +64,13 @@ const Header = ({ picture }) => {
     toggleLogged()
   }
 
+  const handleClick = () => {
+    setOpen(prev => !prev)
+  }
+  const handleClickAway = () => {
+    setOpen(false)
+  }
+
   useEffect(() => {}, [isLogged, navigate])
 
   return (
@@ -79,27 +87,29 @@ const Header = ({ picture }) => {
           ),
         }}
       />
-      <Menu>
-        <ProfilePicture
-          src={picture ? picture : DefaultPicture}
-          alt='Bouton menu et photo de profil'
-          onClick={() => setOpen(!open)}
-        />
-        {open && (
-          <Options menu={true}>
-            <Link to={`/profile/${id}`}>
-              <OptionItem topOption={true} onClick={() => setOpen(!open)}>
-                <PersonIcon />
-                Mon profil
+      <ClickAwayListener onClickAway={handleClickAway}>
+        <Menu>
+          <ProfilePicture
+            src={picture ? picture : DefaultPicture}
+            alt='Bouton menu et photo de profil'
+            onClick={handleClick}
+          />
+          {open && (
+            <Options menu={true}>
+              <Link to={`/profile/${id}`}>
+                <OptionItem topOption={true} onClick={() => setOpen(!open)}>
+                  <PersonIcon />
+                  Mon profil
+                </OptionItem>
+              </Link>
+              <OptionItem menu={true} onClick={logOut}>
+                <LogoutIcon />
+                Se déconnecter
               </OptionItem>
-            </Link>
-            <OptionItem menu={true} onClick={logOut}>
-              <LogoutIcon />
-              Se déconnecter
-            </OptionItem>
-          </Options>
-        )}
-      </Menu>
+            </Options>
+          )}
+        </Menu>
+      </ClickAwayListener>
     </StyledHeader>
   )
 }
