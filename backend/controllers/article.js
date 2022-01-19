@@ -41,7 +41,27 @@ exports.getArticles = (req, res, next) => {
 
 exports.getOneArticle = (req, res, next) => {}
 
-exports.deleteArticle = (req, res, next) => {}
+exports.deleteArticle = (req, res, next) => {
+  if (!req.params.id) {
+    return res
+      .status(400)
+      .json({ message: 'Mauvaise requête, manque id en paramètre' })
+  }
+  if (!req.body.admin) {
+    return res.status(400).json({ message: 'Il manque admin dans le body' })
+  }
+  Article.findOne({ where: { id: req.params.id } }).then(article => {
+    if (req.body.userId !== article.UserId && req.body.admin === 'false')
+      return res.status(401).json({
+        message: "Vous n'avez pas l'autorisation de supprimer cet utilisateur.",
+      })
+  })
+  Article.destroy({ where: { id: req.params.id } })
+    .then(deleted => {
+      return res.status(200).json({ message: deleted + ' article supprimé !' })
+    })
+    .catch(error => res.status(400).json({ error }))
+}
 
 exports.postComment = (req, res, next) => {
   if (!req.body.comment.content || !req.body.userId || !req.params.articleId) {

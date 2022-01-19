@@ -13,6 +13,7 @@ import { useState } from 'react'
 import { Options, OptionItem } from '../../components/Options'
 import { useFetchComments } from '../../utils/hooks'
 import { Link } from 'react-router-dom'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
 
 const PostWrapper = styled.article`
   padding: 36px 0 21px;
@@ -73,6 +74,10 @@ const PostContent = styled.p`
 const Interactions = styled.div`
   display: flex;
   justify-content: space-between;
+  > div:hover {
+    background-color: ${colors.lightblue};
+    color: ${colors.blue};
+  }
 `
 const LikeIcon = styled.div``
 const CommentIcon = styled.div``
@@ -146,6 +151,7 @@ const Post = ({
   currentUser,
 }) => {
   const [open, setOpen] = useState(false)
+  const [openComments, setOpenComments] = useState(false)
   const [comment, setComment] = useState('')
   const { comments, error } = useFetchComments(
     `http://localhost:8000/articles/${articleId}/comments`
@@ -153,7 +159,7 @@ const Post = ({
   const fullname = firstname + ' ' + name
   const pic = picture ? picture : DefaultPicture
   const formattedDate = date.slice(0, 10)
-
+  const currentUserOwnsPost = postCreator === currentUser.id
   console.log(`article ${articleId} comments: `, comments, error)
 
   const sendComment = async comment => {
@@ -185,6 +191,36 @@ const Post = ({
     }
   }
 
+  const handleDeleteArticle = async () => {
+    const token = localStorage.getItem('token').replace(/['"]+/g, '')
+    const bearer = 'Bearer ' + token
+    const apiRoute = `http://localhost:8000/articles/${articleId}`
+    const body = {
+      userId: localStorage.getItem('userId'),
+      admin: currentUser.admin,
+    }
+    const requestOptions = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Authorization: bearer },
+      body: JSON.stringify(body),
+    }
+    try {
+      const response = await fetch(apiRoute, requestOptions)
+      const data = await response.json()
+      console.log(data)
+      window.location.reload()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleOpenComments = () => {
+    setOpenComments(prev => !prev)
+  }
+  const handleClickAway = () => {
+    setOpen(false)
+  }
+
   return (
     <>
       <PostWrapper>
@@ -201,23 +237,29 @@ const Post = ({
               </SubInfo>
             </UserInfo>
           </UserDisplay>
-          {(currentUser.admin || postCreator === currentUser.id) && (
+          {(currentUser.admin || currentUserOwnsPost) && (
             <PostOptions>
               <MoreIcon
-                onClick={() => setOpen(!open)}
+                onClick={() => setOpen(prev => !prev)}
                 className={open && 'interaction-icon'}
               >
                 <MoreHorizIcon />
               </MoreIcon>
               {open && (
-                <Options>
-                  <OptionItem topOption={true}>
-                    <EditIcon /> Modifier le post
-                  </OptionItem>
-                  <OptionItem>
-                    <DeleteIcon /> Supprimer le post
-                  </OptionItem>
-                </Options>
+                <ClickAwayListener onClickAway={handleClickAway}>
+                  <Options>
+                    {currentUserOwnsPost && (
+                      <OptionItem topOption={true}>
+                        <EditIcon />
+                        Modifier le post
+                      </OptionItem>
+                    )}
+                    <OptionItem onClick={handleDeleteArticle}>
+                      <DeleteIcon />
+                      Supprimer le post
+                    </OptionItem>
+                  </Options>
+                </ClickAwayListener>
               )}
             </PostOptions>
           )}
@@ -230,25 +272,31 @@ const Post = ({
           <LikeIcon className='interaction-icon'>
             <ThumbUpIcon />
           </LikeIcon>
-          <CommentIcon className='interaction-icon'>
+          <CommentIcon
+            activeComments={openComments}
+            className='interaction-icon'
+            onClick={handleOpenComments}
+          >
             <ChatBubbleIcon />
           </CommentIcon>
         </Interactions>
-        <CommentSection>
-          <UserPicture
-            comment={true}
-            src={
-              currentUser.pictureUrl ? currentUser.pictureUrl : DefaultPicture
-            }
-          />
-          <CommentInput
-            placeholder='Ajouter une réponse'
-            onBlur={e => setComment(e.target.value)}
-          />
-          <SendBtn onClick={() => sendComment(comment)}>
-            <SendIcon />
-          </SendBtn>
-        </CommentSection>
+        {openComments && (
+          <CommentSection>
+            <UserPicture
+              comment={true}
+              src={
+                currentUser.pictureUrl ? currentUser.pictureUrl : DefaultPicture
+              }
+            />
+            <CommentInput
+              placeholder='Ajouter une réponse'
+              onBlur={e => setComment(e.target.value)}
+            />
+            <SendBtn onClick={() => sendComment(comment)}>
+              <SendIcon />
+            </SendBtn>
+          </CommentSection>
+        )}
       </PostWrapper>
     </>
   )

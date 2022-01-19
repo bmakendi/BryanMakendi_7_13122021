@@ -68,6 +68,7 @@ const Header = ({ picture }) => {
   const handleClick = () => {
     setOpen(prev => !prev)
   }
+
   const handleClickAway = () => {
     setOpen(false)
   }
