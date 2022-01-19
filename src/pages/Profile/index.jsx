@@ -22,16 +22,18 @@ import MailIcon from '@mui/icons-material/Mail'
 import DefaultPicture from '../../assets/images/profile.png'
 import { useEffect, useContext, useState } from 'react'
 import { CurrentUserContext } from '../../utils/context'
+import Modal from '../../components/Modal'
 
 const Profile = () => {
   const [selectedFile, setSelectedFile] = useState()
   const [jobTitle, setJobTitle] = useState('')
+  const [modalOpened, setModalOpened] = useState(false)
   const { currentUser, updateCurrentUser } = useContext(CurrentUserContext)
   const { id } = useParams()
-  const currentUsersPage = parseInt(id) === parseInt(currentUser.id) // parsing just to make sure we have ids of the same type
-  const { user, userError } = useFetchUser(`http://localhost:8000/auth/${id}`)
+  const currentUsersPage = parseInt(id) === parseInt(currentUser.id) //if the profile belongs to the current user then true
+  const { user, userError } = useFetchUser(`http://localhost:8000/auth/${id}`) //fetching profile's owner
   const currentUserIsAdmin = currentUser.admin
-  const usersPageIsAdmin = user.admin
+  const usersPageIsAdmin = user.admin //true if the profile page belongs to an admin, current user of not
 
   const token = localStorage.getItem('token').replace(/['"]+/g, '')
   const bearer = 'Bearer ' + token
@@ -97,9 +99,13 @@ const Profile = () => {
     }
   }
 
+  const handleDeleteClick = () => {
+    setModalOpened(prev => !prev)
+  }
+
   return (
     <>
-      <Header picture={user.pictureUrl} />
+      <Header picture={currentUser.pictureUrl} />
       <MainWrapper page='profile'>
         <ProfileBtn>
           <Link to='/groupomania'>
@@ -178,11 +184,19 @@ const Profile = () => {
         </ProfileInfo>
       </MainWrapper>
       {(currentUsersPage || currentUserIsAdmin) && (
-        <ProfileBtn deleteBtn={true}>
+        <ProfileBtn deleteBtn={true} onClick={handleDeleteClick}>
           {currentUsersPage
             ? 'Supprimer mon compte'
             : 'Supprimer cet utilisateur'}
         </ProfileBtn>
+      )}
+      {modalOpened && (
+        <Modal
+          ownAccount={currentUsersPage}
+          closing={handleDeleteClick}
+          admin={currentUserIsAdmin}
+          id={id}
+        />
       )}
     </>
   )

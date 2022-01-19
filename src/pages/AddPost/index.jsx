@@ -12,10 +12,12 @@ import {
 import { ResultMsg } from '../Signup/style'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { CurrentUserContext } from '../../utils/context'
 
 const AddPost = ({ userPicture }) => {
+  const { currentUser } = useContext(CurrentUserContext)
   const { register, handleSubmit } = useForm()
   const [resultMsg, setResultMsg] = useState('')
   const [loading, setLoading] = useState(false)
@@ -57,7 +59,7 @@ const AddPost = ({ userPicture }) => {
 
   return (
     <>
-      <Header picture={userPicture} />
+      <Header picture={currentUser.pictureUrl} />
       <MainWrapper>
         {!loading && clicked ? <ResultMsg>{resultMsg}</ResultMsg> : null}
         <Link to='/groupomania'>

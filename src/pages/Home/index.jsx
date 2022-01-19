@@ -26,6 +26,8 @@ const Home = () => {
     'http://localhost:8000/articles/'
   )
 
+  error && console.log(error)
+
   const sortFilter = (a, b) => {
     return filter === 'oldest' ? b.id - a.id : a.id - b.id
   }

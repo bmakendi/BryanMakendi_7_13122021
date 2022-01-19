@@ -7,8 +7,10 @@ module.exports = (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY)
     const userId = decodedToken.userId
     if (
-      (req.body.userId && parseInt(req.body.userId) !== parseInt(userId)) ||
-      (req.params.id && parseInt(req.params.id) !== parseInt(userId))
+      req.body.userId &&
+      parseInt(req.body.userId) !== parseInt(userId) &&
+      req.params.id &&
+      parseInt(req.params.id) !== parseInt(userId)
     ) {
       return res.status(403).json({
         message: "Vous n'avez pas l'autorisation d'effectuer cette requête.",

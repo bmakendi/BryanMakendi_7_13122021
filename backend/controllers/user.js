@@ -188,12 +188,34 @@ exports.updateJob = (req, res, next) => {
  */
 exports.deleteUser = (req, res, next) => {
   if (!req.params.id) {
-    return res.status(400).send(new Error('Bad request ! Need a userId.'))
+    return res
+      .status(400)
+      .json({ message: 'Mauvaise requête, manque id en paramètre' })
+  }
+  if (!req.body.admin) {
+    return res.status(400).json({ message: 'Il manque admin dans le body' })
   }
   if (req.body.userId !== req.params.id && req.body.admin === 'false')
     return res.status(401).json({
       message: "Vous n'avez pas l'autorisation de supprimer cet utilisateur.",
     })
+  User.findOne({ where: { id: req.params.id } })
+    .then(user => {
+      if (!user)
+        return res.status(401).json({ error: 'Utilisateur non trouvé !' })
+      if (user.pictureUrl) {
+        const filename = user.pictureUrl.split('/images/')[1]
+        fs.unlink('images/' + filename, error => {
+          if (error) throw error
+        })
+      }
+    })
+    .catch(error =>
+      res.status(500).json({
+        message: 'Erreur avec la recherche utilisateur',
+        error: error,
+      })
+    )
   User.destroy({ where: { id: req.params.id } })
     .then(deleted => {
       return res
