@@ -11,6 +11,7 @@ import {
   UserProvider,
 } from './utils/context'
 import ErrorPage from './pages/ErrorPage'
+import UpdatePost from './pages/UpdatePost'
 
 const App = () => {
   return (
@@ -24,6 +25,10 @@ const App = () => {
               <Route element={<ProtectedRoutes />}>
                 <Route path='/groupomania' element={<Home />} />
                 <Route path='/groupomania/create-post' element={<AddPost />} />
+                <Route
+                  path='/groupomania/create-post/:articleId'
+                  element={<UpdatePost />}
+                />
                 <Route path='/profile/:id' element={<Profile />} />
               </Route>
               <Route path='*' element={<ErrorPage />} />

@@ -37,7 +37,6 @@ const Login = () => {
   const [msg, setMsg] = useState('')
   const navigate = useNavigate()
 
-  console.log('is user logged ? ', isLogged)
   useEffect(() => {
     isLogged && navigate('/groupomania', { replace: true })
   }, [isLogged, navigate])
@@ -53,7 +52,6 @@ const Login = () => {
     try {
       const response = await fetch(apiRoute, requestOptions)
       const data = await response.json()
-      console.log(data)
       if (data.token) {
         setMsg('')
         localStorage.setItem('userId', JSON.stringify(data.userId))

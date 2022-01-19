@@ -50,7 +50,6 @@ const Signup = () => {
     try {
       const response = await fetch(apiRoute, requestOptions)
       const data = await response.json()
-      console.log(data)
       if (data.token) {
         localStorage.setItem('userId', JSON.stringify(data.userId))
         localStorage.setItem('token', JSON.stringify(data.token))
@@ -70,7 +69,6 @@ const Signup = () => {
 
   const submitForm = async formData => {
     delete formData.confirmPassword
-    console.log('form data is : ', formData)
     const body = formData
     const apiRoute = 'http://localhost:8000/auth/signup'
     const requestOptions = {
@@ -88,7 +86,6 @@ const Signup = () => {
         setResultText('Inscription réussie !')
         handleLogin(formData.email, formData.password)
       }
-      console.log(data)
     } catch (error) {
       console.log(error)
     } finally {

@@ -13,7 +13,7 @@ router.put('/:id', auth, articleCtrl.modifyArticle)
 router.get('/', articleCtrl.getArticles)
 
 //Fetching one article sends a request to this path
-router.get('/:id', auth, articleCtrl.getOneArticle)
+router.get('/:id', articleCtrl.getOneArticle)
 
 //Deleting an article sends a request to this path
 router.delete('/:id', auth, articleCtrl.deleteArticle)

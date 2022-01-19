@@ -9,7 +9,11 @@ exports.postArticle = (req, res, next) => {
     !req.body.article.content ||
     !req.body.userId
   ) {
-    return res.status(400).send(new Error('Bad request !'))
+    return res
+      .status(400)
+      .json({
+        message: 'Mauvaise requête, besoin de userId et un objet article',
+      })
   }
   Article.create({
     title: req.body.article.title,
@@ -17,10 +21,40 @@ exports.postArticle = (req, res, next) => {
     UserId: req.body.userId,
   })
     .then(() => res.status(201).json({ message: 'Article posté !' }))
-    .catch(error => res.status(400).json({ error }))
+    .catch(error =>
+      res
+        .status(400)
+        .json({ message: 'Erreur lors de la création du post', error })
+    )
 }
 
-exports.modifyArticle = (req, res, next) => {}
+exports.modifyArticle = (req, res, next) => {
+  if (
+    !req.body.article.title ||
+    !req.body.article.content ||
+    !req.body.userId
+  ) {
+    return res
+      .status(400)
+      .json({
+        message: 'Mauvaise requête, besoin de userId et un objet article',
+      })
+  }
+  Article.update(
+    {
+      title: req.body.article.title,
+      content: req.body.article.content,
+      UserId: req.body.userId,
+    },
+    { where: { id: req.params.id } }
+  )
+    .then(() => res.status(201).json({ message: 'Article modifié !' }))
+    .catch(error =>
+      res
+        .status(400)
+        .json({ message: 'Erreur lors de la modification du post', error })
+    )
+}
 
 exports.getArticles = (req, res, next) => {
   Article.findAll({
@@ -39,7 +73,16 @@ exports.getArticles = (req, res, next) => {
     )
 }
 
-exports.getOneArticle = (req, res, next) => {}
+exports.getOneArticle = (req, res, next) => {
+  if (!req.params.id) {
+    return res.status(400).send(new Error('Bad request ! Need a userId.'))
+  }
+  Article.findOne({ where: { id: req.params.id } })
+    .then(article => res.status(200).json(article))
+    .catch(error =>
+      res.status(404).json({ message: 'Article introuvable.', error })
+    )
+}
 
 exports.deleteArticle = (req, res, next) => {
   if (!req.params.id) {

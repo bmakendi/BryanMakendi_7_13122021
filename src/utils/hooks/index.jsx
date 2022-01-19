@@ -46,6 +46,23 @@ export const useFetchUser = url => {
   return { userLoading, user, userError }
 }
 
+export const useFetchOneArticle = url => {
+  const [article, setArticle] = useState([])
+  useEffect(() => {
+    fetch(url)
+      .then(res => {
+        return res.json()
+      })
+      .then(data => {
+        setArticle(data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [url])
+  return { article }
+}
+
 export const useFetchComments = url => {
   const [comments, setComments] = useState([])
   const [error, setError] = useState(false)

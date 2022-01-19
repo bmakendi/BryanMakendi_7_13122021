@@ -12,7 +12,7 @@ import { IconButton, TextareaAutosize } from '@mui/material'
 import { useState } from 'react'
 import { Options, OptionItem } from '../../components/Options'
 import { useFetchComments } from '../../utils/hooks'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 
 const PostWrapper = styled.article`
@@ -150,6 +150,7 @@ const Post = ({
   postCreator,
   currentUser,
 }) => {
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const [openComments, setOpenComments] = useState(false)
   const [comment, setComment] = useState('')
@@ -221,6 +222,9 @@ const Post = ({
     setOpen(false)
   }
 
+  const handleModifyPost = () => {
+    navigate(`/groupomania/create-post/${articleId}`, { replace: true })
+  }
   return (
     <>
       <PostWrapper>
@@ -249,7 +253,7 @@ const Post = ({
                 <ClickAwayListener onClickAway={handleClickAway}>
                   <Options>
                     {currentUserOwnsPost && (
-                      <OptionItem topOption={true}>
+                      <OptionItem topOption={true} onClick={handleModifyPost}>
                         <EditIcon />
                         Modifier le post
                       </OptionItem>

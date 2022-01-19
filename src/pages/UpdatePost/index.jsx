@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Header from '../../components/Header'
 import { MainWrapper } from '../Home/style'
 import {
@@ -8,31 +8,42 @@ import {
   StyledTextArea,
   PublishBtn,
   FormWrapper,
-} from './style'
+} from '../AddPost/style'
 import { ResultMsg } from '../Signup/style'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { useForm } from 'react-hook-form'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { CurrentUserContext } from '../../utils/context'
+import { useFetchOneArticle } from '../../utils/hooks'
 
-const AddPost = () => {
+const UpdatePost = () => {
   const { currentUser } = useContext(CurrentUserContext)
   const { register, handleSubmit } = useForm()
   const [resultMsg, setResultMsg] = useState('')
   const [loading, setLoading] = useState(false)
   const [clicked, setClicked] = useState(false)
   const navigate = useNavigate()
+  const { articleId } = useParams()
+  const { article } = useFetchOneArticle(
+    `http://localhost:8000/articles/${articleId}`
+  )
+
+  console.log(article)
 
   const sendPost = async data => {
-    const article = { title: data.title, content: data.content }
+    const article = {
+      userId: currentUser.id,
+      title: data.title,
+      content: data.content,
+    }
     const userId = localStorage.getItem('userId')
     const token = localStorage.getItem('token').replace(/['"]+/g, '')
     const bearer = 'Bearer ' + token
     const body = { userId: userId, article }
-    const url = 'http://localhost:8000/articles/'
+    const url = `http://localhost:8000/articles/${articleId}`
     const requestOptions = {
-      method: 'POST',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: bearer },
       body: JSON.stringify(body),
     }
@@ -67,9 +78,13 @@ const AddPost = () => {
         </Link>
         <TitleBox>Ajouter un post</TitleBox>
         <FormWrapper onSubmit={handleSubmit(sendPost)}>
-          <StyledInput placeholder='Ajouter un titre' {...register('title')} />
+          <StyledInput
+            placeholder={article.title}
+            defaultValue={article.title}
+            {...register('title')}
+          />
           <StyledTextArea
-            placeholder='Rédiger un post'
+            defaultValue={article.content}
             {...register('content')}
           />
           <PublishBtn type='submit' disabled={loading}>
@@ -84,4 +99,4 @@ const AddPost = () => {
   )
 }
 
-export default AddPost
+export default UpdatePost
