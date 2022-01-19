@@ -11,7 +11,8 @@ router.post('/signup', userCtrl.signup)
 router.post('/login', userCtrl.login)
 
 //When a user wants to update his profile picture or/and his job title, a request gets sent to this path
-router.put('/:id', auth, multer, userCtrl.modifyUser)
+router.put('/imageUpdate/:id', auth, multer, userCtrl.updateImage)
+router.put('/jobUpdate/:id', auth, userCtrl.updateJob)
 
 //When a user wants to delete its account, a request gets sent to this path
 router.delete('/:id', auth, userCtrl.deleteUser)

@@ -24,11 +24,18 @@ export const ProfileInfo = styled.div`
   text-align: center;
 `
 export const ProfilePictureWrapper = styled.div`
-  margin-bottom: ${({ marginbot }) => (marginbot ? '3.8125rem' : '1.375rem')};
+  margin-bottom: ${({ marginbot }) => (marginbot ? '3.5rem' : '1.375rem')};
+  position: relative;
 `
 export const ProfilePicture = styled.img`
   width: 6.25rem;
   height: 6.25rem;
+  object-fit: cover;
+  border-radius: 50%;
+  &:hover {
+    opacity: ${({ editable }) => editable && '0.8'};
+    cursor: ${({ editable }) => editable && 'pointer'};
+  }
 `
 export const EditUserInfo = styled.p`
   display: flex;
@@ -52,10 +59,24 @@ export const ProfileUserName = styled.h2`
 export const ProfileJobWrapper = styled.div`
   margin-bottom: 1.1875rem;
 `
-export const ProfileUserJob = styled.p`
+export const UserJob = styled.p`
   margin-bottom: 0.5rem;
   font-weight: 600;
   font-size: 1.0625rem;
+`
+export const ProfileUserJob = styled.input`
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  text-align: center;
+  border: none;
+  color: #000;
+  background-color: ${colors.lightergrey};
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  &:hover {
+    background-color: ${colors.lightgrey};
+  }
 `
 export const ProfileUserContact = styled(Link)`
   display: flex;

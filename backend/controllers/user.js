@@ -97,7 +97,7 @@ exports.login = (req, res, next) => {
 /**
  * Updating a profile picture or a job title will lead to this function.
  */
-exports.modifyUser = (req, res, next) => {
+exports.updateImage = (req, res, next) => {
   if (req.file) {
     User.findOne({ where: { id: req.params.id } })
       .then(user => {
@@ -110,14 +110,19 @@ exports.modifyUser = (req, res, next) => {
           })
         }
       })
-      .catch(error => res.status(500).json({ error: error }))
+      .catch(error =>
+        res.status(500).json({
+          message: 'Erreur avec la recherche utilisateur',
+          error: error,
+        })
+      )
     User.update(
       {
         pictureUrl: `${req.protocol}://${req.get('host')}/images/${
           req.file.filename
         }`,
       },
-      { where: { id: req.body.userId } }
+      { where: { id: req.params.id } }
     )
       .then(() => res.status(200).json({ message: 'Photo bien modifié !' }))
       .catch(error =>
@@ -125,8 +130,49 @@ exports.modifyUser = (req, res, next) => {
           message: 'Erreur lors de la modification de la photo : ' + error,
         })
       )
-  } else if (req.body.job) {
-    User.update({ job: req.body.job }, { where: { id: req.body.userId } })
+  } else {
+    console.log(req.file)
+    return res.status(400).json({ message: 'on est ici' })
+  }
+}
+
+exports.updateJob = (req, res, next) => {
+  if (!req.body.job) {
+    return res
+      .status(400)
+      .send(new Error('Bad request, body needs a job entry.'))
+  }
+  const job = capitalizeFirstLetter(req.body.job)
+  if (
+    job === 'Chargé de communication' ||
+    job === 'Chargée de communication' ||
+    job === 'Chargé.e de communication' ||
+    job === 'Chargé.e de comm' ||
+    job === 'Chargé de comm' ||
+    job === 'Chargée de comm' ||
+    job === 'Chargée de com' ||
+    job === 'Chargé de com' ||
+    job === 'Chargé.e de com'
+  ) {
+    User.update(
+      { job: req.body.job, admin: 1 },
+      { where: { id: req.body.userId } }
+    )
+      .then(() =>
+        res
+          .status(200)
+          .json({ message: 'Job bien modifié et désormais modérateur !' })
+      )
+      .catch(error =>
+        res
+          .status(400)
+          .json({ message: 'Erreur lors de la modification du job : ' + error })
+      )
+  } else {
+    User.update(
+      { job: req.body.job, admin: 0 },
+      { where: { id: req.body.userId } }
+    )
       .then(() => res.status(200).json({ message: 'Job bien modifié !' }))
       .catch(error =>
         res

@@ -44,6 +44,7 @@ const ProfilePicture = styled.img`
   width: 2.5rem;
   height: 2.5rem;
   cursor: pointer;
+  object-fit: cover;
 `
 const Menu = styled.div`
   position: relative;

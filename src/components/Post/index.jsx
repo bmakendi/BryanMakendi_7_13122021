@@ -41,6 +41,8 @@ const UserDisplay = styled.div`
 const UserPicture = styled.img`
   width: ${({ comment }) => (comment ? '2.25rem' : '2.5rem')};
   height: ${({ comment }) => (comment ? '2.25rem' : '2.5rem')};
+  object-fit: cover;
+  border-radius: 50%;
 `
 const UserInfo = styled.div``
 const UserName = styled.p`

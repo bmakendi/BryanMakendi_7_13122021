@@ -1,8 +1,11 @@
 //Server behavior
 const express = require('express')
+const path = require('path')
+
 const userRoutes = require('./routes/user')
 const articleRoutes = require('./routes/article')
 const likeRoutes = require('./routes/like')
+
 const app = express()
 
 //Setting request headers
@@ -21,7 +24,7 @@ app.use((req, res, next) => {
 
 //Parsing json
 app.use(express.json())
-
+app.use('/images', express.static(path.join(__dirname, 'images')))
 //User request will end up on these routes
 app.use('/auth', userRoutes)
 app.use('/articles', articleRoutes)
