@@ -9,11 +9,9 @@ exports.postArticle = (req, res, next) => {
     !req.body.article.content ||
     !req.body.userId
   ) {
-    return res
-      .status(400)
-      .json({
-        message: 'Mauvaise requête, besoin de userId et un objet article',
-      })
+    return res.status(400).json({
+      message: 'Mauvaise requête, besoin de userId et un objet article',
+    })
   }
   Article.create({
     title: req.body.article.title,
@@ -34,11 +32,9 @@ exports.modifyArticle = (req, res, next) => {
     !req.body.article.content ||
     !req.body.userId
   ) {
-    return res
-      .status(400)
-      .json({
-        message: 'Mauvaise requête, besoin de userId et un objet article',
-      })
+    return res.status(400).json({
+      message: 'Mauvaise requête, besoin de userId et un objet article',
+    })
   }
   Article.update(
     {
@@ -90,13 +86,10 @@ exports.deleteArticle = (req, res, next) => {
       .status(400)
       .json({ message: 'Mauvaise requête, manque id en paramètre' })
   }
-  if (!req.body.admin) {
-    return res.status(400).json({ message: 'Il manque admin dans le body' })
-  }
   Article.findOne({ where: { id: req.params.id } }).then(article => {
     if (req.body.userId !== article.UserId && req.body.admin === 'false')
       return res.status(401).json({
-        message: "Vous n'avez pas l'autorisation de supprimer cet utilisateur.",
+        message: "Vous n'avez pas l'autorisation de supprimer cet article.",
       })
   })
   Article.destroy({ where: { id: req.params.id } })
@@ -107,18 +100,16 @@ exports.deleteArticle = (req, res, next) => {
 }
 
 exports.postComment = (req, res, next) => {
-  if (!req.body.comment.content || !req.body.userId || !req.params.articleId) {
-    return res.status(400).send(new Error('Bad request !'))
+  if (!req.body.content || !req.body.userId || !req.params.articleId) {
+    return res
+      .status(400)
+      .json({ message: 'mauvaise requête, manque des trucs dans le body' })
   }
-  const comment = new Comment({
-    content: req.body.comment.content,
-    firstname: req.body.firstname,
-    name: req.body.name,
+  Comment.create({
+    content: req.body.content,
     UserId: req.body.userId,
     ArticleId: req.params.articleId,
   })
-  comment
-    .save()
     .then(() => res.status(201).json({ message: 'Commentaire posté !' }))
     .catch(error =>
       res.status(400).json({
@@ -134,9 +125,43 @@ exports.getComments = (req, res, next) => {
       .status(400)
       .send(new Error('Bad request ! Need an id in parameters.'))
   }
-  Comment.findAll({ where: { ArticleId: req.params.articleId } })
+  Comment.findAll({
+    where: { ArticleId: req.params.articleId },
+    include: [
+      {
+        model: User,
+        attributes: ['name', 'firstname', 'pictureUrl', 'admin'],
+      },
+    ],
+  })
     .then(comments => res.status(200).json(comments))
     .catch(error =>
       res.status(404).json({ message: 'Aucun commentaire de trouvé.', error })
+    )
+}
+
+exports.deleteComment = (req, res, next) => {
+  if (!req.params.commentId) {
+    return res.status(400).json({
+      message: 'Mauvaise requête, manque id du commentaire en paramètre',
+    })
+  }
+  Comment.findOne({ where: { id: req.params.commentId } }).then(comment => {
+    if (req.body.userId !== comment.UserId && req.body.admin === 'false')
+      return res.status(401).json({
+        message: "Vous n'avez pas l'autorisation de supprimer ce commentaire.",
+      })
+  })
+  Comment.destroy({ where: { id: req.params.commentId } })
+    .then(deleted => {
+      return res
+        .status(200)
+        .json({ message: deleted + ' commentaire supprimé !' })
+    })
+    .catch(error =>
+      res.status(400).json({
+        message: 'Erreur lors de la suppression du commentaire',
+        error,
+      })
     )
 }

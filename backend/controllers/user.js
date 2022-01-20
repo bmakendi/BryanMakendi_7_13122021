@@ -4,7 +4,7 @@ const db = require('../models')
 const User = db.user
 const fs = require('fs')
 
-/* Making sure the first letter of the job is capitalized */
+/* Making sure the first letter of the job/name is capitalized */
 const capitalizeFirstLetter = str => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
@@ -49,8 +49,8 @@ exports.signup = (req, res, next) => {
       User.create({
         email: req.body.email,
         password: hash,
-        name: req.body.name,
-        firstname: req.body.firstname,
+        name: capitalizeFirstLetter(req.body.name),
+        firstname: capitalizeFirstLetter(req.body.firstname),
         job: job,
         admin: admin,
       })

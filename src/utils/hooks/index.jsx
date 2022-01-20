@@ -82,3 +82,12 @@ export const useFetchComments = url => {
   }, [url])
   return { comments, error }
 }
+
+export const useFormatDate = date => {
+  const tempDate = date.slice(0, 10)
+  const formattedYear = tempDate.slice(2, 4)
+  const formattedMonth = tempDate.slice(5, 7)
+  const formattedDay = tempDate.slice(8, 10)
+  const formattedDate = `${formattedDay}-${formattedMonth}-${formattedYear}`
+  return formattedDate
+}

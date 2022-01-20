@@ -54,20 +54,16 @@ db.comment = require('./Comment')(sequelize, Sequelize)
 db.user.hasMany(db.article, { onDelete: 'CASCADE' })
 db.article.belongsTo(db.user, { onDelete: 'CASCADE' })
 
-//Many to many between users and articles through likes table
-db.user.belongsToMany(db.article, { through: db.like }, { onDelete: 'CASCADE' })
-db.article.belongsToMany(db.user, { through: db.like }, { onDelete: 'CASCADE' })
+//One to many between users and articles through likes table
+db.user.hasMany(db.like, { onDelete: 'CASCADE' })
+db.like.belongsTo(db.user, { onDelete: 'CASCADE' })
+db.article.hasMany(db.like, { onDelete: 'CASCADE' })
+db.like.belongsTo(db.article, { onDelete: 'CASCADE' })
 
-//Many to many between users and articles through comments table
-db.user.belongsToMany(
-  db.article,
-  { through: db.comment },
-  { onDelete: 'CASCADE' }
-)
-db.article.belongsToMany(
-  db.user,
-  { through: db.comment },
-  { onDelete: 'CASCADE' }
-)
+//One to many between users and articles through comments table
+db.user.hasMany(db.comment, { onDelete: 'CASCADE' })
+db.comment.belongsTo(db.user, { onDelete: 'CASCADE' })
+db.article.hasMany(db.comment, { onDelete: 'CASCADE' })
+db.comment.belongsTo(db.article, { onDelete: 'CASCADE' })
 
 module.exports = db

@@ -22,5 +22,6 @@ router.delete('/:id', auth, articleCtrl.deleteArticle)
 
 router.post('/:articleId/comments', auth, articleCtrl.postComment)
 router.get('/:articleId/comments', articleCtrl.getComments)
+router.delete('/comments/:commentId', auth, articleCtrl.deleteComment)
 
 module.exports = router

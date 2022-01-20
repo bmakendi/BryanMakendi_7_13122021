@@ -9,17 +9,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    firstname: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    pictureUrl: {
-      type: DataTypes.STRING,
-    },
   })
   return Comment
 }

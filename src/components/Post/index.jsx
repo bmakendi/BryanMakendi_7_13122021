@@ -11,9 +11,10 @@ import SendIcon from '@mui/icons-material/Send'
 import { IconButton, TextareaAutosize } from '@mui/material'
 import { useState } from 'react'
 import { Options, OptionItem } from '../../components/Options'
-import { useFetchComments } from '../../utils/hooks'
+import { useFetchComments, useFormatDate } from '../../utils/hooks'
 import { Link, useNavigate } from 'react-router-dom'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
+import Comment from '../Comment'
 
 const PostWrapper = styled.article`
   padding: 36px 0 21px;
@@ -81,7 +82,7 @@ const Interactions = styled.div`
 `
 const LikeIcon = styled.div``
 const CommentIcon = styled.div``
-const MoreIcon = styled(IconButton)`
+export const MoreIcon = styled(IconButton)`
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -99,9 +100,10 @@ const PostOptions = styled.div`
 `
 const CommentSection = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   max-width: 100%;
-  gap: 5px;
+  gap: 17px;
   margin-top: 0.9375rem;
 `
 const CommentInput = styled(TextareaAutosize)`
@@ -113,6 +115,7 @@ const CommentInput = styled(TextareaAutosize)`
   border-radius: 30px;
   font-family: 'Roboto';
   font-size: 0.9375rem;
+  flex: 1;
   &::placeholder {
     position: absolute;
     color: ${colors.iconGrey};
@@ -137,6 +140,12 @@ const SendBtn = styled.div`
     background-color: ${colors.lightblue};
   }
 `
+const Comments = styled.div`
+  margin-left: 2.625rem;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+`
 
 const Post = ({
   articleId,
@@ -159,22 +168,17 @@ const Post = ({
   )
   const fullname = firstname + ' ' + name
   const pic = picture ? picture : DefaultPicture
-  const formattedDate = date.slice(0, 10)
+  const formattedDate = useFormatDate(date)
   const currentUserOwnsPost = postCreator === currentUser.id
-  console.log(`article ${articleId} comments: `, comments, error)
 
-  const sendComment = async comment => {
+  const sendComment = async () => {
     if (comment || comment !== '') {
       const userId = localStorage.getItem('userId')
       const token = localStorage.getItem('token').replace(/['"]+/g, '')
       const bearer = 'Bearer ' + token
       const body = {
         userId: userId,
-        firstname: firstname,
-        name: name,
-        comment: {
-          content: comment,
-        },
+        content: comment,
       }
       const url = `http://localhost:8000/articles/${articleId}/comments`
       const requestOptions = {
@@ -186,6 +190,8 @@ const Post = ({
         const response = await fetch(url, requestOptions)
         const data = await response.json()
         console.log(data)
+        window.location.reload()
+        setOpenComments(true)
       } catch (err) {
         console.log(err)
       }
@@ -218,6 +224,7 @@ const Post = ({
   const handleOpenComments = () => {
     setOpenComments(prev => !prev)
   }
+
   const handleClickAway = () => {
     setOpen(false)
   }
@@ -225,6 +232,11 @@ const Post = ({
   const handleModifyPost = () => {
     navigate(`/groupomania/create-post/${articleId}`, { replace: true })
   }
+
+  if (error) return <div>Oh oh une erreur...</div>
+
+  console.log(comments)
+
   return (
     <>
       <PostWrapper>
@@ -286,19 +298,47 @@ const Post = ({
         </Interactions>
         {openComments && (
           <CommentSection>
-            <UserPicture
-              comment={true}
-              src={
-                currentUser.pictureUrl ? currentUser.pictureUrl : DefaultPicture
-              }
-            />
-            <CommentInput
-              placeholder='Ajouter une réponse'
-              onBlur={e => setComment(e.target.value)}
-            />
-            <SendBtn onClick={() => sendComment(comment)}>
-              <SendIcon />
-            </SendBtn>
+            <div
+              style={{
+                display: 'flex',
+                gap: '5px',
+                alignItems: 'center',
+                minWidth: '100%',
+              }}
+            >
+              <UserPicture
+                comment={true}
+                src={
+                  currentUser.pictureUrl
+                    ? currentUser.pictureUrl
+                    : DefaultPicture
+                }
+              />
+              <CommentInput
+                placeholder='Ajouter une réponse'
+                onBlur={e => setComment(e.target.value)}
+              />
+              <SendBtn onClick={sendComment}>
+                <SendIcon />
+              </SendBtn>
+            </div>
+            <Comments>
+              {comments.map(comment => {
+                return (
+                  <Comment
+                    key={comment.id}
+                    commentId={comment.id}
+                    name={comment.User.name}
+                    firstname={comment.User.firstname}
+                    picture={comment.User.pictureUrl}
+                    content={comment.content}
+                    date={comment.createdAt}
+                    ownerId={comment.UserId}
+                    currentUser={currentUser}
+                  />
+                )
+              })}
+            </Comments>
           </CommentSection>
         )}
       </PostWrapper>
