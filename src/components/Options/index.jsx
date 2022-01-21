@@ -13,6 +13,9 @@ export const Options = styled.div`
   color: ${({ menu }) => (menu ? '#000' : `${colors.grey}`)};
   font-size: 0.9375rem;
   font-weight: 500;
+  @media all and (min-width: 1024px) {
+    top: 45px;
+  }
 `
 export const OptionItem = styled.p`
   display: flex;

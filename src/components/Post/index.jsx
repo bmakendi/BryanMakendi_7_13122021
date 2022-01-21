@@ -75,6 +75,7 @@ const PostTitle = styled.p`
 const PostContent = styled.p`
   font-size: 0.9375rem;
   max-height: 2.5rem;
+  white-space: pre-wrap;
 `
 const Interactions = styled.div`
   display: flex;
@@ -361,7 +362,7 @@ const Post = ({
         </UpperContainer>
         <PostText>
           <PostTitle>{title}</PostTitle>
-          <PostContent>{content.replace(/\n/g, '&#13;&#10;')}</PostContent>
+          <PostContent>{content}</PostContent>
         </PostText>
         <Interactions>
           <LikeIconWrapper liked={liked}>

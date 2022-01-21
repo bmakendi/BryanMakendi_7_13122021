@@ -40,5 +40,15 @@ export const AddPostBtn = styled(RoundedBtn)`
   background-color: ${colors.postBtn};
   opacity: 0.75;
   backdrop-filter: blur(50px);
+  @media all and (min-width: 1024px) {
+    position: initial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 217px;
+    height: 2.5rem;
+    opacity: 1;
+    background-color: ${colors.blue};
+  }
 `
 export const PostsContainer = styled.div``

@@ -15,6 +15,7 @@ import { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CurrentUserContext } from '../../utils/context'
 import { HomepageLoading } from '../../components/Loading'
+import { useMediaQueries } from '../../utils/MediaQueries'
 
 const Home = () => {
   const [filter, setFilter] = useState('oldest')
@@ -25,6 +26,7 @@ const Home = () => {
   const { data, isLoading, error, updateArticles } = useFetchArticles(
     'http://localhost:8000/articles/'
   )
+  const { isTabletOrMobile } = useMediaQueries()
 
   error && console.log(error)
 
@@ -83,9 +85,11 @@ const Home = () => {
             })
           )}
         </PostsContainer>
-        <Link to='/groupomania/create-post'>
-          <AddPostBtn>Ajouter un post</AddPostBtn>
-        </Link>
+        {isTabletOrMobile && (
+          <Link to='/groupomania/create-post'>
+            <AddPostBtn>Ajouter un post</AddPostBtn>
+          </Link>
+        )}
       </MainWrapper>
     </>
   )

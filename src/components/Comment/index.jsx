@@ -7,6 +7,7 @@ import { useFormatDate } from '../../utils/hooks'
 import { useState } from 'react'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import { Options, OptionItem } from '../../components/Options'
+import DefaultPicture from '../../assets/images/profile.png'
 
 const CommentWrapper = styled.div`
   padding: 7px 9px;
@@ -104,7 +105,10 @@ const Comment = ({
     <CommentWrapper>
       <UpperWrapper>
         <UserInfo>
-          <UserPicture src={picture} alt='Auteur du commentaire' />
+          <UserPicture
+            src={picture ? picture : DefaultPicture}
+            alt='Auteur du commentaire'
+          />
           <p className='username'>
             {fullname} <span className='commentDate'>• {formattedDate}</span>
           </p>
