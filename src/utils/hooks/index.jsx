@@ -20,7 +20,21 @@ export const useFetchArticles = url => {
         setError(true)
       })
   }, [url])
-  return { isLoading, data, error }
+
+  const updateArticles = url => {
+    fetch(url)
+      .then(res => {
+        return res.json()
+      })
+      .then(data => {
+        setData(data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  return { isLoading, data, error, updateArticles }
 }
 
 export const useFetchUser = url => {
@@ -80,7 +94,53 @@ export const useFetchComments = url => {
         setError(true)
       })
   }, [url])
-  return { comments, error }
+
+  const updateComments = url => {
+    fetch(url)
+      .then(res => {
+        return res.json()
+      })
+      .then(data => {
+        setComments(data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+  return { comments, error, updateComments }
+}
+
+export const useFetchLikes = url => {
+  const [likes, setLikes] = useState([])
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    fetch(url)
+      .then(res => {
+        return res.json()
+      })
+      .then(data => {
+        setLikes(data)
+      })
+      .catch(err => {
+        console.log(err)
+        setError(true)
+      })
+  }, [url])
+
+  const updateLikes = url => {
+    fetch(url)
+      .then(res => {
+        return res.json()
+      })
+      .then(data => {
+        setLikes(data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+  return { likes, error, updateLikes }
 }
 
 export const useFormatDate = date => {

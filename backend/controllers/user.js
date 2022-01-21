@@ -124,7 +124,9 @@ exports.updateImage = (req, res, next) => {
       },
       { where: { id: req.params.id } }
     )
-      .then(() => res.status(200).json({ message: 'Photo bien modifié !' }))
+      .then(user =>
+        res.status(200).json({ user, message: 'Photo bien modifié !' })
+      )
       .catch(error =>
         res.status(400).json({
           message: 'Erreur lors de la modification de la photo : ' + error,

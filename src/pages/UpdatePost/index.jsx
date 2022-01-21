@@ -70,7 +70,7 @@ const UpdatePost = () => {
 
   return (
     <>
-      <Header picture={currentUser.pictureUrl} />
+      <Header />
       <MainWrapper>
         {!loading && clicked ? <ResultMsg>{resultMsg}</ResultMsg> : null}
         <Link to='/groupomania'>

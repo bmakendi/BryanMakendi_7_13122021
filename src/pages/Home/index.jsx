@@ -22,7 +22,7 @@ const Home = () => {
   const { user, userLoading, userError } = useFetchUser(
     'http://localhost:8000/auth/' + localStorage.getItem('userId')
   )
-  const { data, isLoading, error } = useFetchArticles(
+  const { data, isLoading, error, updateArticles } = useFetchArticles(
     'http://localhost:8000/articles/'
   )
 
@@ -40,12 +40,11 @@ const Home = () => {
   useEffect(() => {
     !userLoading && updateCurrentUser(user)
     localStorage.setItem('currentUser', JSON.stringify(currentUser))
-    console.log('current user: ', currentUser, 'Error ? ', userError)
   }, [currentUser, user, userLoading, userError, updateCurrentUser])
 
   return (
     <>
-      <Header picture={currentUser.pictureUrl} />
+      <Header />
       <MainWrapper>
         <Filters>
           <p>Trier les posts</p>
@@ -78,6 +77,7 @@ const Home = () => {
                   picture={article.User.pictureUrl}
                   postCreator={article.UserId}
                   currentUser={currentUser}
+                  updateArticles={updateArticles}
                 />
               )
             })

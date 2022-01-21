@@ -54,18 +54,23 @@ const Profile = () => {
     setSelectedFile(file)
   }
 
-  const handleFileUpload = async () => {
-    const formData = new FormData()
-    formData.append('image', selectedFile)
-    try {
-      const response = await fetch(
-        `http://localhost:8000/auth/imageUpdate/${id}`,
-        { method: 'PUT', headers: { Authorization: bearer }, body: formData }
-      )
-      const data = await response.json()
-      console.log(data)
-    } catch (err) {
-      console.log(err, 'Erreur avec la modif de photo')
+  const handleFileUpload = async e => {
+    if (typeof selectedFile !== 'undefined') {
+      const formData = new FormData()
+      formData.append('image', selectedFile)
+      try {
+        const response = await fetch(
+          `http://localhost:8000/auth/imageUpdate/${id}`,
+          { method: 'PUT', headers: { Authorization: bearer }, body: formData }
+        )
+        const user = await response.json()
+        console.log('modified user: ', user)
+      } catch (err) {
+        console.log(err, 'Erreur avec la modif de photo')
+      }
+    } else {
+      e.preventDefault()
+      console.log('click on the picture to select a file')
     }
   }
 
@@ -105,7 +110,7 @@ const Profile = () => {
 
   return (
     <>
-      <Header picture={currentUser.pictureUrl} />
+      <Header />
       <MainWrapper page='profile'>
         <ProfileBtn>
           <Link to='/groupomania'>

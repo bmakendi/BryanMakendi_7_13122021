@@ -2,6 +2,7 @@ const db = require('../models')
 const Article = db.article
 const User = db.user
 const Comment = db.comment
+const Like = db.like
 
 exports.postArticle = (req, res, next) => {
   if (
@@ -161,6 +162,60 @@ exports.deleteComment = (req, res, next) => {
     .catch(error =>
       res.status(400).json({
         message: 'Erreur lors de la suppression du commentaire',
+        error,
+      })
+    )
+}
+
+//LIKES
+
+exports.likePost = (req, res, next) => {
+  if (!req.body.userId || !req.params.articleId) {
+    return res.status(400).json({
+      message: 'Mauvaise requête, besoin de body.userId et articleId en param',
+    })
+  }
+  Like.create({
+    UserId: req.body.userId,
+    ArticleId: req.params.articleId,
+  })
+    .then(() => res.status(201).json({ message: 'Like posé !' }))
+    .catch(error =>
+      res.status(400).json({
+        message: 'Erreur avec le like !',
+        error,
+      })
+    )
+}
+
+exports.getLikes = (req, res, next) => {
+  if (!req.params.articleId) {
+    return res
+      .status(400)
+      .json({ message: 'mauvaise requête faut faire un effort' })
+  }
+  Like.findAll({
+    where: { ArticleId: req.params.articleId },
+  })
+    .then(likes => res.status(200).json(likes))
+    .catch(error =>
+      res.status(404).json({ message: 'Aucun like de trouvé.', error })
+    )
+}
+
+exports.unlikePost = (req, res, next) => {
+  if (!req.body.userId || !req.params.articleId) {
+    return res.status(400).json({ message: 'need articleId in params' })
+  }
+  Like.destroy({
+    where: { ArticleId: req.params.articleId, UserId: req.body.userId },
+  })
+    .then(deleted => {
+      return res.status(200).json({ message: deleted + ' like supprimé !' })
+    })
+    .catch(error =>
+      res.status(400).json({
+        message: 'Erreur lors de la suppression du like',
         error,
       })
     )

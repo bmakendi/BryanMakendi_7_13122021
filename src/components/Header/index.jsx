@@ -6,13 +6,13 @@ import SearchIcon from '@mui/icons-material/Search'
 import PropTypes from 'prop-types'
 import DefaultPicture from '../../assets/images/profile.png'
 import { Options, OptionItem } from '../Options'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { CurrentUserContext, UserContext } from '../../utils/context'
-import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import PersonIcon from '@mui/icons-material/Person'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
+import { useFetchUser } from '../../utils/hooks'
 
 const StyledHeader = styled.header`
   display: flex;
@@ -52,11 +52,13 @@ const Menu = styled.div`
   width: 2.5rem;
   z-index: 100;
 `
-const Header = ({ picture }) => {
+const Header = () => {
   const [open, setOpen] = useState(false)
-  const { isLogged, toggleLogged } = useContext(UserContext)
+  const { toggleLogged } = useContext(UserContext)
   const { updateCurrentUser } = useContext(CurrentUserContext)
-  const navigate = useNavigate()
+  const { user } = useFetchUser(
+    'http://localhost:8000/auth/' + localStorage.getItem('userId')
+  )
   const id = localStorage.getItem('userId')
 
   const logOut = () => {
@@ -73,11 +75,11 @@ const Header = ({ picture }) => {
     setOpen(false)
   }
 
-  useEffect(() => {}, [isLogged, navigate])
-
   return (
     <StyledHeader>
-      <img src={Logo} alt='Logo de Groupomania' />
+      <Link to='/groupomania'>
+        <img src={Logo} alt='Logo de Groupomania' />
+      </Link>
       <Searchbar
         type='search'
         placeholder='Rechercher'
@@ -92,7 +94,7 @@ const Header = ({ picture }) => {
       <ClickAwayListener onClickAway={handleClickAway}>
         <Menu>
           <ProfilePicture
-            src={picture ? picture : DefaultPicture}
+            src={user.pictureUrl ? user.pictureUrl : DefaultPicture}
             alt='Bouton menu et photo de profil'
             onClick={handleClick}
           />

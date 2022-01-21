@@ -19,9 +19,13 @@ router.get('/:id', articleCtrl.getOneArticle)
 router.delete('/:id', auth, articleCtrl.deleteArticle)
 
 //COMMENTS
-
 router.post('/:articleId/comments', auth, articleCtrl.postComment)
 router.get('/:articleId/comments', articleCtrl.getComments)
 router.delete('/comments/:commentId', auth, articleCtrl.deleteComment)
+
+//LIKES
+router.post('/:articleId/likes', auth, articleCtrl.likePost)
+router.get('/:articleId/likes', articleCtrl.getLikes)
+router.delete('/:articleId/likes', auth, articleCtrl.unlikePost)
 
 module.exports = router

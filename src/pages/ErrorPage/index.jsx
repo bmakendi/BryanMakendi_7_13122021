@@ -1,6 +1,4 @@
 import Header from '../../components/Header'
-import { useContext } from 'react'
-import { CurrentUserContext } from '../../utils/context'
 import styled from 'styled-components'
 import errorLogo from '../../assets/images/error.svg'
 import colors from '../../utils/colors'
@@ -35,11 +33,9 @@ const RedirectBtn = styled.div`
   }
 `
 const ErrorPage = () => {
-  const { currentUser } = useContext(CurrentUserContext)
-
   return (
     <>
-      <Header picture={currentUser.pictureUrl} />
+      <Header />
       <StyledErrorPage>
         <img src={errorLogo} alt="Logo d'erreur" />
         <h1>Une erreur est survenue</h1>

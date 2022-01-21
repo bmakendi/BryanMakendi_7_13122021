@@ -9,9 +9,13 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import SendIcon from '@mui/icons-material/Send'
 import { IconButton, TextareaAutosize } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Options, OptionItem } from '../../components/Options'
-import { useFetchComments, useFormatDate } from '../../utils/hooks'
+import {
+  useFetchComments,
+  useFormatDate,
+  useFetchLikes,
+} from '../../utils/hooks'
 import { Link, useNavigate } from 'react-router-dom'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Comment from '../Comment'
@@ -75,12 +79,37 @@ const PostContent = styled.p`
 const Interactions = styled.div`
   display: flex;
   justify-content: space-between;
-  > div:hover {
+  .interaction-icon:hover {
     background-color: ${colors.lightblue};
     color: ${colors.blue};
   }
 `
+const LikeIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  .like-icon {
+    background-color: ${({ liked }) =>
+      liked ? `${colors.lightblue}` : `${colors.lightgrey}`};
+    color: ${({ liked }) => (liked ? `${colors.blue}` : `${colors.iconGrey}`)};
+  }
+  span {
+    color: ${colors.iconGrey};
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+`
 const LikeIcon = styled.div``
+const CommentIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  span {
+    color: ${colors.iconGrey};
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+`
 const CommentIcon = styled.div``
 export const MoreIcon = styled(IconButton)`
   width: 36px;
@@ -144,7 +173,7 @@ const Comments = styled.div`
   margin-left: 2.625rem;
   display: flex;
   flex-direction: column;
-  gap: 17px;
+  gap: 5px;
 `
 
 const Post = ({
@@ -158,18 +187,28 @@ const Post = ({
   picture,
   postCreator,
   currentUser,
+  updateArticles,
 }) => {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const [openComments, setOpenComments] = useState(false)
+  const [liked, setLiked] = useState(false)
   const [comment, setComment] = useState('')
-  const { comments, error } = useFetchComments(
+  const { comments, error, updateComments } = useFetchComments(
     `http://localhost:8000/articles/${articleId}/comments`
   )
+  const { likes, updateLikes } = useFetchLikes(
+    `http://localhost:8000/articles/${articleId}/likes`
+  )
+
   const fullname = firstname + ' ' + name
   const pic = picture ? picture : DefaultPicture
   const formattedDate = useFormatDate(date)
   const currentUserOwnsPost = postCreator === currentUser.id
+
+  useEffect(() => {
+    if (likes.find(like => like.UserId === currentUser.id)) setLiked(true)
+  }, [currentUser.id, likes])
 
   const sendComment = async () => {
     if (comment || comment !== '') {
@@ -190,8 +229,7 @@ const Post = ({
         const response = await fetch(url, requestOptions)
         const data = await response.json()
         console.log(data)
-        window.location.reload()
-        setOpenComments(true)
+        updateComments(`http://localhost:8000/articles/${articleId}/comments`)
       } catch (err) {
         console.log(err)
       }
@@ -215,7 +253,7 @@ const Post = ({
       const response = await fetch(apiRoute, requestOptions)
       const data = await response.json()
       console.log(data)
-      window.location.reload()
+      updateArticles('http://localhost:8000/articles/')
     } catch (error) {
       console.log(error)
     }
@@ -233,9 +271,50 @@ const Post = ({
     navigate(`/groupomania/create-post/${articleId}`, { replace: true })
   }
 
-  if (error) return <div>Oh oh une erreur...</div>
+  const handleClickLike = async () => {
+    const userId = localStorage.getItem('userId')
+    const token = localStorage.getItem('token').replace(/['"]+/g, '')
+    const bearer = 'Bearer ' + token
+    const body = {
+      userId: userId,
+    }
+    if (!liked) {
+      const url = `http://localhost:8000/articles/${articleId}/likes`
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: bearer },
+        body: JSON.stringify(body),
+      }
+      try {
+        const response = await fetch(url, requestOptions)
+        const data = await response.json()
+        console.log(data)
+        setLiked(true)
+        updateLikes(`http://localhost:8000/articles/${articleId}/likes`)
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      console.log('already liked')
+      const url = `http://localhost:8000/articles/${articleId}/likes`
+      const requestOptions = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', Authorization: bearer },
+        body: JSON.stringify(body),
+      }
+      try {
+        const response = await fetch(url, requestOptions)
+        const data = await response.json()
+        console.log(data)
+        setLiked(false)
+        updateLikes(`http://localhost:8000/articles/${articleId}/likes`)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
 
-  console.log(comments)
+  if (error) return <div>Oh oh une erreur...</div>
 
   return (
     <>
@@ -282,19 +361,28 @@ const Post = ({
         </UpperContainer>
         <PostText>
           <PostTitle>{title}</PostTitle>
-          <PostContent>{content}</PostContent>
+          <PostContent>{content.replace(/\n/g, '&#13;&#10;')}</PostContent>
         </PostText>
         <Interactions>
-          <LikeIcon className='interaction-icon'>
-            <ThumbUpIcon />
-          </LikeIcon>
-          <CommentIcon
-            activeComments={openComments}
-            className='interaction-icon'
-            onClick={handleOpenComments}
-          >
-            <ChatBubbleIcon />
-          </CommentIcon>
+          <LikeIconWrapper liked={liked}>
+            <LikeIcon
+              className='interaction-icon like-icon'
+              onClick={handleClickLike}
+            >
+              <ThumbUpIcon />
+            </LikeIcon>
+            <span>{likes.length}</span>
+          </LikeIconWrapper>
+          <CommentIconWrapper>
+            <CommentIcon
+              activeComments={openComments}
+              className='interaction-icon'
+              onClick={handleOpenComments}
+            >
+              <ChatBubbleIcon />
+            </CommentIcon>
+            <span>{comments.length}</span>
+          </CommentIconWrapper>
         </Interactions>
         {openComments && (
           <CommentSection>
@@ -335,6 +423,8 @@ const Post = ({
                     date={comment.createdAt}
                     ownerId={comment.UserId}
                     currentUser={currentUser}
+                    articleId={articleId}
+                    updateComments={updateComments}
                   />
                 )
               })}

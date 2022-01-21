@@ -64,6 +64,8 @@ const Comment = ({
   date,
   ownerId,
   currentUser,
+  articleId,
+  updateComments,
 }) => {
   const [open, setOpen] = useState(false)
   const fullname = firstname + ' ' + name
@@ -92,7 +94,7 @@ const Comment = ({
       const response = await fetch(apiRoute, requestOptions)
       const data = await response.json()
       console.log(data)
-      window.location.reload()
+      updateComments(`http://localhost:8000/articles/${articleId}/comments`)
     } catch (error) {
       console.log(error)
     }
