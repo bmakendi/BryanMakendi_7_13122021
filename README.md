@@ -23,7 +23,6 @@ You will also need a file named ".env" in the backend directory, so open the exa
 Clone this directory, then do the following :
 
 ```bash
-# install only if not installed before
 cd backend
 npm install
 cd ../frontend/
