@@ -172,6 +172,7 @@ const Header = ({ searching }) => {
             type='search'
             placeholder='Rechercher'
             $isDarkMode={theme === 'dark'}
+            onInput={e => searching(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
