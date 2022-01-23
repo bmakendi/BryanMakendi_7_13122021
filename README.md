@@ -1,70 +1,57 @@
-# Getting Started with Create React App
+# Groupomania
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was created with Node.js, Express.js and mysql for the backend.
 
-## Available Scripts
+The frontend was created with [React](https://github.com/facebook/create-react-app), styled-components, react-router and Material UI.
 
-In the project directory, you can run:
+## **Important**
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The project was developped on node version 16.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+You will also need to have mysql installed, with a database named "groupomania".
 
-### `npm test`
+```bash
+CREATE DATABASE groupomania;
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Make sure to have your mysql server running before trying to use the app.
 
-### `npm run build`
+You will also need a file named ".env" in the backend directory, so open the example.env in the backend directory and do as it says.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## **How to install and use**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Clone this directory, then do the following :
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+# install only if not installed before
+cd backend
+npm install
+cd ../frontend/
+npm install
+# you can now go back to the backend directory and do the following
+npm start
+cd ../frontend/
+npm start
+```
 
-### `npm run eject`
+The api runs on local port 8000.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The website will be visible at [http://localhost:3000/](http://localhost:3000/).
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## **What is Groupomania**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Groupomania is OpenClassrooms' last project for the web developper course. It was required to use a frontend web framework of choice, and mysql for the database.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+The app is a social network made for a company named Groupomnia, where you can sign in (or log in), write posts, see coworkers' posts, visit their profile, edit yours etc.
 
-## Learn More
+Features like dark mode and a searchbar were also implemented, so don't hesitate to play around with it !
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contact me
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+Mail : bryan.makendi@gmail.com
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+LinkedIn : [Bryan Makendi](https://www.linkedin.com/in/bryan-makendi/)
