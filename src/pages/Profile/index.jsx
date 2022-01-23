@@ -21,10 +21,11 @@ import EditIcon from '@mui/icons-material/Edit'
 import MailIcon from '@mui/icons-material/Mail'
 import DefaultPicture from '../../assets/images/profile.png'
 import { useEffect, useContext, useState } from 'react'
-import { CurrentUserContext } from '../../utils/context'
+import { CurrentUserContext, ThemeContext } from '../../utils/context'
 import Modal from '../../components/Modal'
 
 const Profile = () => {
+  const { theme } = useContext(ThemeContext)
   const [selectedFile, setSelectedFile] = useState()
   const [jobTitle, setJobTitle] = useState('')
   const [modalOpened, setModalOpened] = useState(false)
@@ -111,8 +112,8 @@ const Profile = () => {
   return (
     <>
       <Header />
-      <MainWrapper page='profile'>
-        <ProfileBtn>
+      <MainWrapper page='profile' isDarkMode={theme === 'dark'}>
+        <ProfileBtn isDarkMode={theme === 'dark'}>
           <Link to='/groupomania'>
             <ChevronLeftIcon />
             <span>Retourner au forum</span>
@@ -120,7 +121,7 @@ const Profile = () => {
         </ProfileBtn>
 
         {(currentUsersPage || usersPageIsAdmin) && (
-          <ProfileTitle>
+          <ProfileTitle isDarkMode={theme === 'dark'}>
             <h1 className='title'>{currentUsersPage && 'Mon profil'}</h1>
             <p className='admin'>{usersPageIsAdmin && 'Modérateur'}</p>
           </ProfileTitle>
@@ -159,7 +160,9 @@ const Profile = () => {
               />
             )}
           </ProfilePictureWrapper>
-          <ProfileUserName>{`${user.firstname} ${user.name}`}</ProfileUserName>
+          <ProfileUserName
+            isDarkMode={theme === 'dark'}
+          >{`${user.firstname} ${user.name}`}</ProfileUserName>
           <ProfileJobWrapper>
             {currentUsersPage ? (
               <form onSubmit={handleJobSubmit}>
@@ -167,6 +170,7 @@ const Profile = () => {
                   type='text'
                   defaultValue={user.job}
                   onChange={handleJobChange}
+                  $isDarkMode={theme === 'dark'}
                 />
                 <EditUserInfo onClick={handleJobClick}>
                   <EditIcon />
@@ -189,7 +193,11 @@ const Profile = () => {
         </ProfileInfo>
       </MainWrapper>
       {(currentUsersPage || currentUserIsAdmin) && (
-        <ProfileBtn deleteBtn={true} onClick={handleDeleteClick}>
+        <ProfileBtn
+          deleteBtn={true}
+          onClick={handleDeleteClick}
+          isDarkMode={theme === 'dark'}
+        >
           {currentUsersPage
             ? 'Supprimer mon compte'
             : 'Supprimer cet utilisateur'}

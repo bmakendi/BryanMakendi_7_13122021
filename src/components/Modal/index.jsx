@@ -1,6 +1,8 @@
 import colors from '../../utils/colors'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router'
+import { useContext } from 'react'
+import { ThemeContext } from '../../utils/context'
 
 const ModalWrapper = styled.div`
   max-width: 19.0625rem;
@@ -14,18 +16,24 @@ const ModalWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   gap: 41px;
-  background-color: #fff;
-  border: 1px solid ${colors.lightgrey};
+  background-color: ${({ isDarkMode }) =>
+    isDarkMode ? `${colors.dark}` : `#fff`};
+  border: 1px solid
+    ${({ isDarkMode }) =>
+      isDarkMode ? `${colors.lighterDark}` : `${colors.lightgrey}`};
   border-radius: 10px;
-  box-shadow: 0px 6px 6px 2px ${colors.lightgrey};
+  box-shadow: 0px 6px 6px 3px
+    ${({ isDarkMode }) =>
+      isDarkMode ? `${colors.dark}` : `${colors.lightgrey}`};
   text-align: center;
   z-index: 1000;
 `
 const ModalBackground = styled.div`
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  background-color: #fff;
-  opacity: 0.5;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-color: ${({ isDarkMode }) =>
+    isDarkMode ? `${colors.lighterdark}` : `${colors.lightergrey}`};
+  opacity: ${({ isDarkMode }) => (isDarkMode ? `0.99` : `0.5`)};
   z-index: 999;
   position: fixed;
   right: 0;
@@ -36,6 +44,7 @@ const ModalBackground = styled.div`
 const ModalTitle = styled.p`
   font-size: 1.25rem;
   font-weight: 500;
+  color: ${({ isDarkMode }) => isDarkMode && `#fff`};
 `
 const ModalBtn = styled.div`
   display: flex;
@@ -61,6 +70,7 @@ const ModalBtn = styled.div`
 
 const Modal = ({ ownAccount, closing, admin, id }) => {
   const navigate = useNavigate()
+  const { theme } = useContext(ThemeContext)
 
   const handleDeletion = async () => {
     const token = localStorage.getItem('token').replace(/['"]+/g, '')
@@ -93,9 +103,9 @@ const Modal = ({ ownAccount, closing, admin, id }) => {
 
   return (
     <>
-      <ModalBackground />
-      <ModalWrapper>
-        <ModalTitle>
+      <ModalBackground isDarkMode={theme === 'dark'} />
+      <ModalWrapper isDarkMode={theme === 'dark'}>
+        <ModalTitle isDarkMode={theme === 'dark'}>
           {ownAccount
             ? 'Êtes vous sûr de vouloir supprimer votre compte ?'
             : 'Êtes vous sûr de vouloir supprimer ce compte ?'}

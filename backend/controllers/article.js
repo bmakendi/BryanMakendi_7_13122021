@@ -28,18 +28,13 @@ exports.postArticle = (req, res, next) => {
 }
 
 exports.modifyArticle = (req, res, next) => {
-  if (
-    !req.body.article.title ||
-    !req.body.article.content ||
-    !req.body.userId
-  ) {
+  if (!req.body.article.content || !req.body.userId) {
     return res.status(400).json({
-      message: 'Mauvaise requête, besoin de userId et un objet article',
+      erreur: 'Mauvaise requête, besoin de userId et un objet article',
     })
   }
   Article.update(
     {
-      title: req.body.article.title,
       content: req.body.article.content,
       UserId: req.body.userId,
     },

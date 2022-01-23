@@ -17,18 +17,32 @@ export const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
   gap: 27px;
+  input,
+  input:-internal-autofill-selected {
+    color: ${({ $isDarkMode }) => $isDarkMode && `#fff`};
+    border-radius: 10px;
+    background-color: ${({ $isDarkMode }) =>
+      $isDarkMode ? `${colors.dark}` : `#fff`} !important;
+    &::placeholder {
+      color: ${({ $isDarkMode }) => ($isDarkMode ? `#fff` : `${colors.grey}`)};
+    }
+  }
+  div {
+    color: ${({ $isDarkMode }) => $isDarkMode && `#fff`};
+  }
+  fieldset {
+    border-color: ${({ $isDarkMode }) =>
+      $isDarkMode ? `#fff` : `${colors.grey}`};
+  }
 `
 export const StyledInput = styled(TextField)`
-  background-color: white;
   position: relative;
   fieldset {
     border-radius: 10px;
-    border-color: ${colors.grey};
   }
   input {
     padding: 16px 14px 16px 0;
     &::placeholder {
-      color: ${colors.grey};
       font-size: 1.0625rem;
       opacity: 1;
     }
@@ -45,12 +59,13 @@ export const StyledInput = styled(TextField)`
   }
 `
 export const StyledLink = styled(Link)`
-  color: #000;
+  color: ${({ $isDarkMode }) => ($isDarkMode ? `#fff` : `#000`)};
   font-weight: bold;
   font-size: 1.125rem;
   align-self: center;
   &:hover {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid
+      ${({ $isDarkMode }) => ($isDarkMode ? `#fff` : `#000`)};
   }
 `
 export const TopRightDeco = styled.img`

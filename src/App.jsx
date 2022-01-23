@@ -12,6 +12,7 @@ import {
 } from './utils/context'
 import ErrorPage from './pages/ErrorPage'
 import UpdatePost from './pages/UpdatePost'
+import GlobalStyle from './utils/styles/GlobalStyle'
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
       <ThemeProvider>
         <CurrentUserProvider>
           <UserProvider>
+            <GlobalStyle />
             <Routes>
               <Route path='/' element={<Login />} />
               <Route path='/signup' element={<Signup />} />

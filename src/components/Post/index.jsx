@@ -9,7 +9,8 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import SendIcon from '@mui/icons-material/Send'
 import { IconButton, TextareaAutosize } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { ThemeContext } from '../../utils/context'
 import { Options, OptionItem } from '../../components/Options'
 import {
   useFetchComments,
@@ -19,20 +20,30 @@ import {
 import { Link, useNavigate } from 'react-router-dom'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Comment from '../Comment'
+import RoundedBtn from '../RoundedBtn'
+import { useMediaQueries } from '../../utils/MediaQueries'
 
 const PostWrapper = styled.article`
   padding: 36px 0 21px;
-  border-bottom: solid 1px ${colors.lightgrey};
+  border-bottom: solid 1px
+    ${({ $isDarkMode }) =>
+      $isDarkMode ? `${colors.darkBorderColor}` : `${colors.lightgrey}`};
   .interaction-icon {
     width: 36px;
     height: 36px;
-    background-color: ${colors.lightgrey};
+    background-color: ${({ $isDarkMode }) =>
+      $isDarkMode ? `${colors.lighterDark}` : `${colors.lightgrey}`};
     color: ${colors.iconGrey};
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    &:hover {
+      background-color: ${({ $isDarkMode }) =>
+        $isDarkMode ? `${colors.darkHover}` : `${colors.lightblue}`};
+      color: ${colors.blue};
+    }
   }
 `
 const UpperContainer = styled.div`
@@ -50,7 +61,12 @@ const UserPicture = styled.img`
   object-fit: cover;
   border-radius: 50%;
 `
-const UserInfo = styled.div``
+const UserInfo = styled.div`
+  div,
+  p {
+    color: ${({ $isDarkMode }) => $isDarkMode && '#FFF'};
+  }
+`
 const UserName = styled.p`
   font-weight: bold;
 `
@@ -66,6 +82,9 @@ const Date = styled.span`
 const PostText = styled.div`
   max-height: 6.625rem;
   margin-bottom: 1.25rem;
+  p {
+    color: ${({ $isDarkMode }) => $isDarkMode && '#FFF'};
+  }
 `
 const PostTitle = styled.p`
   font-weight: 500;
@@ -80,18 +99,16 @@ const PostContent = styled.p`
 const Interactions = styled.div`
   display: flex;
   justify-content: space-between;
-  .interaction-icon:hover {
-    background-color: ${colors.lightblue};
-    color: ${colors.blue};
-  }
 `
 const LikeIconWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 9px;
   .like-icon {
-    background-color: ${({ liked }) =>
-      liked ? `${colors.lightblue}` : `${colors.lightgrey}`};
+    background-color: ${({ liked, $isDarkMode }) =>
+      liked && !$isDarkMode && `${colors.lightblue}`};
+    background-color: ${({ liked, $isDarkMode }) =>
+      liked && $isDarkMode && `${colors.darkHover}`};
     color: ${({ liked }) => (liked ? `${colors.blue}` : `${colors.iconGrey}`)};
   }
   span {
@@ -141,18 +158,21 @@ const CommentInput = styled(TextareaAutosize)`
   width: 14.7rem;
   min-height: 2.5rem;
   max-height: 2.5rem;
-  border: 1px solid ${colors.lightgrey};
+  border: 1px solid
+    ${({ $isDarkMode }) =>
+      $isDarkMode ? `${colors.dark}` : `${colors.lightgrey}`};
   border-radius: 30px;
   font-family: 'Roboto';
   font-size: 0.9375rem;
   flex: 1;
+  background-color: #fff;
   &::placeholder {
     position: absolute;
-    color: ${colors.iconGrey};
     opacity: 1;
     font-family: 'Roboto';
     font-size: 0.9375rem;
     top: 10px;
+    color: ${colors.iconGrey};
   }
 `
 const SendBtn = styled.div`
@@ -191,6 +211,7 @@ const Post = ({
   updateArticles,
 }) => {
   const navigate = useNavigate()
+  const { theme } = useContext(ThemeContext)
   const [open, setOpen] = useState(false)
   const [openComments, setOpenComments] = useState(false)
   const [liked, setLiked] = useState(false)
@@ -201,6 +222,7 @@ const Post = ({
   const { likes, updateLikes } = useFetchLikes(
     `http://localhost:8000/articles/${articleId}/likes`
   )
+  const { isTabletOrMobile } = useMediaQueries()
 
   const fullname = firstname + ' ' + name
   const pic = picture ? picture : DefaultPicture
@@ -319,11 +341,11 @@ const Post = ({
 
   return (
     <>
-      <PostWrapper>
+      <PostWrapper $isDarkMode={theme === 'dark'}>
         <UpperContainer>
           <UserDisplay>
             <UserPicture src={pic} alt='Créateur du post' />
-            <UserInfo>
+            <UserInfo $isDarkMode={theme === 'dark'}>
               <Link to={`/profile/${postCreator}`}>
                 <UserName>{fullname}</UserName>
               </Link>
@@ -343,9 +365,12 @@ const Post = ({
               </MoreIcon>
               {open && (
                 <ClickAwayListener onClickAway={handleClickAway}>
-                  <Options>
+                  <Options isDarkMode={theme === 'dark'}>
                     {currentUserOwnsPost && (
-                      <OptionItem topOption={true} onClick={handleModifyPost}>
+                      <OptionItem
+                        className='border-bot'
+                        onClick={handleModifyPost}
+                      >
                         <EditIcon />
                         Modifier le post
                       </OptionItem>
@@ -360,12 +385,12 @@ const Post = ({
             </PostOptions>
           )}
         </UpperContainer>
-        <PostText>
+        <PostText $isDarkMode={theme === 'dark'}>
           <PostTitle>{title}</PostTitle>
           <PostContent>{content}</PostContent>
         </PostText>
-        <Interactions>
-          <LikeIconWrapper liked={liked}>
+        <Interactions $isDarkMode={theme === 'dark'}>
+          <LikeIconWrapper liked={liked} $isDarkMode={theme === 'dark'}>
             <LikeIcon
               className='interaction-icon like-icon'
               onClick={handleClickLike}
@@ -406,10 +431,17 @@ const Post = ({
               <CommentInput
                 placeholder='Ajouter une réponse'
                 onBlur={e => setComment(e.target.value)}
+                $isDarkMode={theme === 'dark'}
               />
-              <SendBtn onClick={sendComment}>
-                <SendIcon />
-              </SendBtn>
+              {isTabletOrMobile ? (
+                <SendBtn onClick={sendComment} className='interaction-icon'>
+                  <SendIcon />
+                </SendBtn>
+              ) : (
+                <RoundedBtn onClick={sendComment} answer={'true'}>
+                  Répondre
+                </RoundedBtn>
+              )}
             </div>
             <Comments>
               {comments.map(comment => {

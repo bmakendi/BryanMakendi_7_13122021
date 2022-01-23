@@ -12,14 +12,16 @@ import {
 import { ResultMsg } from '../Signup/style'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { ThemeContext } from '../../utils/context'
 
 const AddPost = () => {
   const { register, handleSubmit } = useForm()
   const [resultMsg, setResultMsg] = useState('')
   const [loading, setLoading] = useState(false)
   const [clicked, setClicked] = useState(false)
+  const { theme } = useContext(ThemeContext)
   const navigate = useNavigate()
 
   const sendPost = async data => {
@@ -61,14 +63,19 @@ const AddPost = () => {
       <MainWrapper>
         {!loading && clicked ? <ResultMsg>{resultMsg}</ResultMsg> : null}
         <Link to='/groupomania'>
-          <Cancel>Annuler</Cancel>
+          <Cancel isDarkMode={theme === 'dark'}>Annuler</Cancel>
         </Link>
-        <TitleBox>Ajouter un post</TitleBox>
+        <TitleBox isDarkMode={theme === 'dark'}>Ajouter un post</TitleBox>
         <FormWrapper onSubmit={handleSubmit(sendPost)}>
-          <StyledInput placeholder='Ajouter un titre' {...register('title')} />
+          <StyledInput
+            placeholder='Ajouter un titre'
+            {...register('title')}
+            $isDarkMode={theme === 'dark'}
+          />
           <StyledTextArea
             placeholder='Rédiger un post'
             {...register('content')}
+            $isDarkMode={theme === 'dark'}
           />
           <PublishBtn type='submit' disabled={loading}>
             Publier

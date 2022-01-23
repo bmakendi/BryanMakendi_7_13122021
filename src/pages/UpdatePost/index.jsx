@@ -4,7 +4,6 @@ import { MainWrapper } from '../Home/style'
 import {
   Cancel,
   TitleBox,
-  StyledInput,
   StyledTextArea,
   PublishBtn,
   FormWrapper,
@@ -14,7 +13,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { useForm } from 'react-hook-form'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { CurrentUserContext } from '../../utils/context'
+import { CurrentUserContext, ThemeContext } from '../../utils/context'
 import { useFetchOneArticle } from '../../utils/hooks'
 
 const UpdatePost = () => {
@@ -23,18 +22,16 @@ const UpdatePost = () => {
   const [resultMsg, setResultMsg] = useState('')
   const [loading, setLoading] = useState(false)
   const [clicked, setClicked] = useState(false)
+  const { theme } = useContext(ThemeContext)
   const navigate = useNavigate()
   const { articleId } = useParams()
   const { article } = useFetchOneArticle(
     `http://localhost:8000/articles/${articleId}`
   )
 
-  console.log(article)
-
   const sendPost = async data => {
     const article = {
       userId: currentUser.id,
-      title: data.title,
       content: data.content,
     }
     const userId = localStorage.getItem('userId')
@@ -55,7 +52,7 @@ const UpdatePost = () => {
       if (!data.message) {
         setResultMsg("N'oubliez pas d'écrire avant de poster !")
       } else {
-        setResultMsg('Article posté !')
+        setResultMsg('Article modifié !')
         setTimeout(() => {
           navigate('/groupomania', { replace: true })
         }, 1000)
@@ -74,18 +71,14 @@ const UpdatePost = () => {
       <MainWrapper>
         {!loading && clicked ? <ResultMsg>{resultMsg}</ResultMsg> : null}
         <Link to='/groupomania'>
-          <Cancel>Annuler</Cancel>
+          <Cancel isDarkMode={theme === 'dark'}>Annuler</Cancel>
         </Link>
-        <TitleBox>Ajouter un post</TitleBox>
+        <TitleBox isDarkMode={theme === 'dark'}>Modifier le post</TitleBox>
         <FormWrapper onSubmit={handleSubmit(sendPost)}>
-          <StyledInput
-            placeholder={article.title}
-            defaultValue={article.title}
-            {...register('title')}
-          />
           <StyledTextArea
             defaultValue={article.content}
             {...register('content')}
+            $isDarkMode={theme === 'dark'}
           />
           <PublishBtn type='submit' disabled={loading}>
             Publier

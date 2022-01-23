@@ -13,6 +13,7 @@ export const ProfileTitle = styled.div`
   .title {
     font-weight: 500;
     font-size: 1.25rem;
+    color: ${({ isDarkMode }) => isDarkMode && `#fff`};
   }
   .admin {
     font-weight: 500;
@@ -55,6 +56,7 @@ export const ProfileUserName = styled.h2`
   margin-bottom: 1.75rem;
   font-size: 1.1875rem;
   font-weight: 600;
+  color: ${({ isDarkMode }) => isDarkMode && `#fff`};
 `
 export const ProfileJobWrapper = styled.div`
   margin-bottom: 1.1875rem;
@@ -70,12 +72,15 @@ export const ProfileUserJob = styled.input`
   font-size: 1.0625rem;
   text-align: center;
   border: none;
-  color: #000;
-  background-color: ${colors.lightergrey};
+  color: ${({ $isDarkMode }) => ($isDarkMode ? `#fff` : `#000`)};
+  background-color: ${({ $isDarkMode }) =>
+    $isDarkMode ? `${colors.lighterDark}` : `${colors.lightergrey}`};
   padding: 0.5rem 1rem;
   border-radius: 10px;
+  cursor: pointer;
   &:hover {
-    background-color: ${colors.lightgrey};
+    background-color: ${({ $isDarkMode }) =>
+      $isDarkMode ? `${colors.darkHover}` : `${colors.lightgrey}`};
   }
 `
 export const ProfileUserContact = styled(Link)`

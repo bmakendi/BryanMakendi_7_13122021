@@ -11,11 +11,19 @@ export const ProfileBtn = styled.div`
   align-items: center;
   justify-content: ${({ deleteBtn }) =>
     deleteBtn ? 'center' : 'space-between'};
-  border: solid 1px ${colors.lightgrey};
+  border: solid 1px
+    ${({ isDarkMode }) =>
+      isDarkMode ? `${colors.lighterDark}` : `${colors.lightgrey}`};
   border-radius: 10px;
+  background-color: ${({ isDarkMode, deleteBtn }) =>
+    isDarkMode && !deleteBtn && colors.lighterDark};
   color: ${({ deleteBtn }) => deleteBtn && colors.red};
   font-size: 0.9375rem;
   font-weight: ${({ deleteBtn }) => (deleteBtn ? '600' : '500')};
+  span,
+  svg {
+    color: ${({ isDarkMode }) => isDarkMode && '#FFF'};
+  }
   &:hover {
     border-color: ${({ deleteBtn }) => deleteBtn && colors.red};
   }

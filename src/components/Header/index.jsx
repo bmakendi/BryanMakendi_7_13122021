@@ -8,7 +8,11 @@ import PropTypes from 'prop-types'
 import DefaultPicture from '../../assets/images/profile.png'
 import { Options, OptionItem } from '../Options'
 import { useContext, useState } from 'react'
-import { CurrentUserContext, UserContext } from '../../utils/context'
+import {
+  CurrentUserContext,
+  UserContext,
+  ThemeContext,
+} from '../../utils/context'
 import { Link } from 'react-router-dom'
 import PersonIcon from '@mui/icons-material/Person'
 import LogoutIcon from '@mui/icons-material/Logout'
@@ -16,13 +20,16 @@ import ClickAwayListener from '@mui/material/ClickAwayListener'
 import { useFetchUser } from '../../utils/hooks'
 import { useMediaQueries } from '../../utils/MediaQueries'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import LightModeIcon from '@mui/icons-material/LightMode'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
 
 const StyledHeader = styled.header`
   display: flex;
   padding: 28px 13px 13px;
   justify-content: space-between;
   align-items: center;
-  background-color: ${colors.lightergrey};
+  background-color: ${({ isDarkMode }) =>
+    isDarkMode ? `${colors.lighterDark}` : `${colors.lightergrey}`};
   @media all and (min-width: 1024px) {
     padding: 28px 22px 22px;
   }
@@ -31,7 +38,8 @@ const HeaderLogo = styled.img`
   height: 100%;
 `
 const Searchbar = styled(TextField)`
-  background-color: ${colors.lightgrey};
+  background-color: ${({ $isDarkMode }) =>
+    $isDarkMode ? `${colors.dark}` : `${colors.lightgrey}`};
   border-radius: 30px;
   height: 2.5rem;
   div {
@@ -41,11 +49,15 @@ const Searchbar = styled(TextField)`
     border: none;
   }
   input {
+    color: ${({ $isDarkMode }) => $isDarkMode && `#fff`};
     &::placeholder {
-      color: ${colors.grey};
+      color: ${({ $isDarkMode }) => ($isDarkMode ? `#FFF` : `${colors.grey}`)};
       font-size: 1.0625rem;
       opacity: 1;
     }
+  }
+  svg {
+    color: ${({ $isDarkMode }) => $isDarkMode && '#FFF'};
   }
   @media all and (min-width: 1024px) {
     width: 22.1875rem;
@@ -87,6 +99,9 @@ const UserInfo = styled.div`
   .admin {
     font-size: 0.875rem;
   }
+  p {
+    color: ${({ $isDarkMode }) => $isDarkMode && '#FFF'};
+  }
 `
 const ArrowDown = styled.div`
   display: flex;
@@ -94,11 +109,13 @@ const ArrowDown = styled.div`
   svg {
     width: 40px;
     height: 40px;
+    color: ${({ isDarkMode }) => isDarkMode && '#c4c4c4'};
   }
 `
 
 const Header = () => {
   const [open, setOpen] = useState(false)
+  const { theme, toggleTheme } = useContext(ThemeContext)
   const { toggleLogged } = useContext(UserContext)
   const { updateCurrentUser } = useContext(CurrentUserContext)
   const { user } = useFetchUser(
@@ -123,7 +140,7 @@ const Header = () => {
   }
 
   return (
-    <StyledHeader>
+    <StyledHeader isDarkMode={theme === 'dark'}>
       {isTabletOrMobile ? (
         <>
           <Link to='/groupomania'>
@@ -132,6 +149,7 @@ const Header = () => {
           <Searchbar
             type='search'
             placeholder='Rechercher'
+            $isDarkMode={theme === 'dark'}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -149,6 +167,7 @@ const Header = () => {
           <Searchbar
             type='search'
             placeholder='Rechercher'
+            $isDarkMode={theme === 'dark'}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -175,14 +194,25 @@ const Header = () => {
                 onClick={handleClick}
               />
               {open && (
-                <Options menu={true}>
+                <Options menu={true} isDarkMode={theme === 'dark'}>
                   <Link to={`/profile/${id}`}>
-                    <OptionItem topOption={true} onClick={() => setOpen(!open)}>
+                    <OptionItem
+                      className='border-bot'
+                      onClick={() => setOpen(!open)}
+                    >
                       <PersonIcon />
                       Mon profil
                     </OptionItem>
                   </Link>
-                  <OptionItem menu={true} onClick={logOut}>
+                  <OptionItem className='border-bot' onClick={toggleTheme}>
+                    {theme === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
+                    {theme === 'dark' ? 'Mode sombre' : 'Mode clair'}
+                  </OptionItem>
+                  <OptionItem
+                    className='disconnect'
+                    menu={true}
+                    onClick={logOut}
+                  >
                     <LogoutIcon />
                     Se déconnecter
                   </OptionItem>
@@ -195,22 +225,30 @@ const Header = () => {
                 src={user.pictureUrl ? user.pictureUrl : DefaultPicture}
                 alt='Bouton menu et photo de profil'
               />
-              <UserInfo>
+              <UserInfo $isDarkMode={theme === 'dark'}>
                 <p>{fullname}</p>
                 {user.admin && <p className='admin'>Modérateur</p>}
               </UserInfo>
-              <ArrowDown>
+              <ArrowDown isDarkMode={theme === 'dark'}>
                 <KeyboardArrowDownIcon />
               </ArrowDown>
               {open && (
-                <Options menu={true}>
+                <Options menu={true} isDarkMode={theme === 'dark'}>
                   <Link to={`/profile/${id}`}>
                     <OptionItem topOption={true} onClick={() => setOpen(!open)}>
                       <PersonIcon />
                       Mon profil
                     </OptionItem>
                   </Link>
-                  <OptionItem menu={true} onClick={logOut}>
+                  <OptionItem topOption={true} onClick={toggleTheme}>
+                    {theme === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
+                    {theme === 'dark' ? 'Mode sombre' : 'Mode clair'}
+                  </OptionItem>
+                  <OptionItem
+                    className='disconnect'
+                    menu={true}
+                    onClick={logOut}
+                  >
                     <LogoutIcon />
                     Se déconnecter
                   </OptionItem>

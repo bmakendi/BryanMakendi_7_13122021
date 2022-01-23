@@ -16,6 +16,10 @@ import vector from '../../assets/form-background/topright_background.svg'
 import fullCircle from '../../assets/form-background/fullcircle.svg'
 import innerEllipse from '../../assets/form-background/inner_ellipse.svg'
 import outerEllipse from '../../assets/form-background/outer_ellipse.svg'
+import darkVector from '../../assets/form-background/dark_topright.svg'
+import darkFullCircle from '../../assets/form-background/darkfullcircle.svg'
+import darkInnerEllipse from '../../assets/form-background/darkInnerEllipse.svg'
+import darkOuterEllipse from '../../assets/form-background/darkOuterEllipse.svg'
 import RoundedBtn from '../../components/RoundedBtn'
 import { InputAdornment } from '@mui/material'
 import EmailIcon from '@mui/icons-material/Email'
@@ -23,7 +27,7 @@ import LockIcon from '@mui/icons-material/Lock'
 import WorkIcon from '@mui/icons-material/Work'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { UserContext } from '../../utils/context'
+import { UserContext, ThemeContext } from '../../utils/context'
 
 const Signup = () => {
   const {
@@ -37,7 +41,9 @@ const Signup = () => {
   const [clicked, setClicked] = useState(false)
   const [resultText, setResultText] = useState('')
   const { toggleLogged } = useContext(UserContext)
+  const { theme } = useContext(ThemeContext)
   const navigate = useNavigate()
+  const darkMode = theme === 'dark'
 
   const handleLogin = async (email, password) => {
     const body = { email, password }
@@ -95,23 +101,28 @@ const Signup = () => {
 
   return (
     <>
-      <TopRightDeco src={vector} alt='Background decoration' mw={600} />
+      <TopRightDeco
+        src={darkMode ? darkVector : vector}
+        alt='Background decoration'
+        mw={600}
+      />
       <BottomLeftDeco
-        src={fullCircle}
+        src={darkMode ? darkFullCircle : fullCircle}
         alt='Background decoration'
         zindex={1}
         w={30}
         mw={230}
       />
       <BottomLeftDeco
-        src={innerEllipse}
+        src={darkMode ? darkInnerEllipse : innerEllipse}
         alt='Background decoration'
+        className='inner-deco'
         zindex={0}
         w={37}
         mw={284}
       />
       <BottomLeftDeco
-        src={outerEllipse}
+        src={darkMode ? darkOuterEllipse : outerEllipse}
         alt='Background decoration'
         zindex={-1}
         w={45}
@@ -123,7 +134,10 @@ const Signup = () => {
           <img src={logo} alt='Logo Groupomania' />
           <img src={logoText} alt='Logo Groupomania' />
         </LogoWrapper>
-        <FormWrapper onSubmit={handleSubmit(submitForm)}>
+        <FormWrapper
+          onSubmit={handleSubmit(submitForm)}
+          $isDarkMode={theme === 'dark'}
+        >
           <NameWrapper>
             <StyledInput
               type='text'

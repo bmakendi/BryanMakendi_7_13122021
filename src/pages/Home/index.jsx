@@ -13,12 +13,13 @@ import { useFetchArticles, useFetchUser } from '../../utils/hooks'
 import Post from '../../components/Post'
 import { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { CurrentUserContext } from '../../utils/context'
+import { CurrentUserContext, ThemeContext } from '../../utils/context'
 import { HomepageLoading } from '../../components/Loading'
 import { useMediaQueries } from '../../utils/MediaQueries'
 
 const Home = () => {
   const [filter, setFilter] = useState('oldest')
+  const { theme } = useContext(ThemeContext)
   const { currentUser, updateCurrentUser } = useContext(CurrentUserContext)
   const { user, userLoading, userError } = useFetchUser(
     'http://localhost:8000/auth/' + localStorage.getItem('userId')
@@ -47,8 +48,8 @@ const Home = () => {
   return (
     <>
       <Header />
-      <MainWrapper>
-        <Filters>
+      <MainWrapper isDarkMode={theme === 'dark'}>
+        <Filters isDarkMode={theme === 'dark'}>
           <p>Trier les posts</p>
           <StyledSelect
             value={filter}
@@ -56,6 +57,7 @@ const Home = () => {
             displayEmpty
             inputProps={{ 'aria-label': 'Without label' }}
             IconComponent={KeyboardArrowDownIcon}
+            $isDarkMode={theme === 'dark'}
           >
             <MenuItem value={'oldest'}>Du plus ancien</MenuItem>
             <MenuItem value={'newest'}>Du plus récent</MenuItem>

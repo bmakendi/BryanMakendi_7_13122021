@@ -21,9 +21,14 @@ import vector from '../../assets/form-background/topright_background.svg'
 import fullCircle from '../../assets/form-background/fullcircle.svg'
 import innerEllipse from '../../assets/form-background/inner_ellipse.svg'
 import outerEllipse from '../../assets/form-background/outer_ellipse.svg'
+import darkVector from '../../assets/form-background/dark_topright.svg'
+import darkFullCircle from '../../assets/form-background/darkfullcircle.svg'
+import darkInnerEllipse from '../../assets/form-background/darkInnerEllipse.svg'
+import darkOuterEllipse from '../../assets/form-background/darkOuterEllipse.svg'
 import { UserContext } from '../../utils/context'
 import { useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
+import { ThemeContext } from '../../utils/context'
 
 const Login = () => {
   const {
@@ -34,9 +39,11 @@ const Login = () => {
     resolver: yupResolver(loginSchema),
   })
   const { isLogged, toggleLogged } = useContext(UserContext)
+  const { theme } = useContext(ThemeContext)
   const [msg, setMsg] = useState('')
   const navigate = useNavigate()
-
+  const darkMode = theme === 'dark'
+  
   useEffect(() => {
     isLogged && navigate('/groupomania', { replace: true })
   }, [isLogged, navigate])
@@ -72,23 +79,28 @@ const Login = () => {
 
   return (
     <>
-      <TopRightDeco src={vector} alt='Background decoration' mw={600} />
+      <TopRightDeco
+        src={darkMode ? darkVector : vector}
+        alt='Background decoration'
+        mw={600}
+      />
       <BottomLeftDeco
-        src={fullCircle}
+        src={darkMode ? darkFullCircle : fullCircle}
         alt='Background decoration'
         zindex={1}
         w={30}
         mw={230}
       />
       <BottomLeftDeco
-        src={innerEllipse}
+        src={darkMode ? darkInnerEllipse : innerEllipse}
         alt='Background decoration'
+        className='inner-deco'
         zindex={0}
         w={37}
         mw={284}
       />
       <BottomLeftDeco
-        src={outerEllipse}
+        src={darkMode ? darkOuterEllipse : outerEllipse}
         alt='Background decoration'
         zindex={-1}
         w={45}
@@ -104,7 +116,10 @@ const Login = () => {
           <img src={logo} alt='Logo Groupomania' />
           <img src={logoText} alt='Logo Groupomania' />
         </LogoWrapper>
-        <FormWrapper onSubmit={handleSubmit(handleLogin)}>
+        <FormWrapper
+          onSubmit={handleSubmit(handleLogin)}
+          $isDarkMode={theme === 'dark'}
+        >
           <StyledInput
             type='text'
             placeholder='Adresse e-mail'
@@ -134,7 +149,9 @@ const Login = () => {
             helperText={errors.password?.message}
           />
           <RoundedBtn type='submit'>Se connecter</RoundedBtn>
-          <StyledLink to='/signup'>Créer un compte</StyledLink>
+          <StyledLink to='/signup' $isDarkMode={theme === 'dark'}>
+            Créer un compte
+          </StyledLink>
         </FormWrapper>
       </MainLayout>
     </>

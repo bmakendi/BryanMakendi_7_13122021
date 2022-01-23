@@ -1,12 +1,22 @@
 import styled, { keyframes } from 'styled-components'
 import colors from '../../utils/colors'
+import { ThemeContext } from '../../utils/context'
+import { useContext } from 'react'
 
 const SkeletonLoading = keyframes`
   from {
-    background-color: hsl(200, 20%, 70%);
+    background-color: #C4C4C4;
   }
   to {
     background-color: hsl(200, 20%, 95%);
+  }
+`
+const DarkSkeletonLoading = keyframes`
+  from {
+    background-color: ${colors.darkHover};
+  }
+  to {
+    background-color: ${colors.lighterDark};
   }
 `
 const SkeletonPostWrapper = styled.div`
@@ -14,7 +24,9 @@ const SkeletonPostWrapper = styled.div`
   border-bottom: solid 1px ${colors.lightgrey};
   .skeleton {
     opacity: 0.7;
-    animation: ${SkeletonLoading} 1s linear infinite alternate;
+    animation: ${({ isDarkMode }) =>
+        isDarkMode ? DarkSkeletonLoading : SkeletonLoading}
+      1s linear infinite alternate;
   }
 `
 const SkeletonUserDisplay = styled.div`
@@ -68,10 +80,14 @@ const SkeletonComments = styled.div`
   border-radius: 40px;
 `
 export const HomepageLoading = () => {
+  const { theme } = useContext(ThemeContext)
   const arrayLoop = [0, 1, 2, 3, 4, 5, 6]
   return arrayLoop.map((elem, index) => {
     return (
-      <SkeletonPostWrapper key={index + '-' + elem}>
+      <SkeletonPostWrapper
+        key={index + '-' + elem}
+        isDarkMode={theme === 'dark'}
+      >
         <SkeletonUserDisplay>
           <SkeletonUserPicture className='skeleton' />
           <SkeletonUserInfo>

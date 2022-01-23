@@ -4,15 +4,20 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import Delete from '@mui/icons-material/Delete'
 import { MoreIcon } from '../Post'
 import { useFormatDate } from '../../utils/hooks'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import { Options, OptionItem } from '../../components/Options'
 import DefaultPicture from '../../assets/images/profile.png'
+import { ThemeContext } from '../../utils/context'
 
 const CommentWrapper = styled.div`
   padding: 7px 9px;
-  background-color: ${colors.lightergrey};
+  background-color: ${({ isDarkMode }) =>
+    isDarkMode ? `${colors.lighterDark}` : `${colors.lightergrey}`};
   border-radius: 10px;
+  p {
+    color: ${({ isDarkMode }) => isDarkMode && `#fff`};
+  }
 `
 const UpperWrapper = styled.div`
   display: flex;
@@ -69,6 +74,7 @@ const Comment = ({
   updateComments,
 }) => {
   const [open, setOpen] = useState(false)
+  const { theme } = useContext(ThemeContext)
   const fullname = firstname + ' ' + name
   const formattedDate = useFormatDate(date)
   const currentUserIsComOwner = currentUser.id === ownerId
@@ -102,7 +108,7 @@ const Comment = ({
   }
 
   return (
-    <CommentWrapper>
+    <CommentWrapper isDarkMode={theme === 'dark'}>
       <UpperWrapper>
         <UserInfo>
           <UserPicture
@@ -123,7 +129,7 @@ const Comment = ({
             </MoreIcon>
             {open && (
               <ClickAwayListener onClickAway={handleClickAway}>
-                <Options>
+                <Options isDarkMode={theme === 'dark'}>
                   <OptionItem onClick={handleDeleteComment}>
                     <Delete />
                     Supprimer

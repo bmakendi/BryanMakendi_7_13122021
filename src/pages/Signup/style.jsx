@@ -11,10 +11,7 @@ export const NameWrapper = styled.div`
 export const ResultMsg = styled.div`
   border-radius: 15px;
   background-color: ${colors.blue};
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  box-shadow: 4px 6px 6px ${colors.lightblue};
-  opacity: 0.6;
+  opacity: 1;
   position: absolute;
   width: 250px;
   left: 0;

@@ -5,14 +5,17 @@ import { TextField, TextareaAutosize, ButtonUnstyled } from '@mui/material'
 export const Cancel = styled.p`
   margin-bottom: 2.75rem;
   font-weight: 500;
+  color: ${({ isDarkMode }) => isDarkMode && `#fff`};
 `
 export const TitleBox = styled.h1`
   padding: 0 0.5625rem 0.75rem;
   margin-bottom: 2.5rem;
   font-size: 1.25rem;
   font-weight: 500;
-  color: ${colors.grey};
-  border-bottom: 1px solid ${colors.lightgrey};
+  color: ${({ isDarkMode }) => (isDarkMode ? `#fff` : `${colors.grey}`)};
+  border-bottom: 1px solid
+    ${({ isDarkMode }) =>
+      isDarkMode ? `${colors.darkBorderColor}` : `${colors.lightgrey}`};
 `
 export const FormWrapper = styled.form`
   display: flex;
@@ -26,10 +29,16 @@ export const StyledInput = styled(TextField)`
   }
   fieldset {
     min-height: 3.0625rem;
-    border: 1px solid ${colors.grey};
+    border: 1px solid
+      ${({ $isDarkMode }) =>
+        $isDarkMode ? `${colors.dark}` : `${colors.grey}`};
     border-radius: 10px;
   }
   input {
+    border-radius: 10px;
+    color: ${({ $isDarkMode }) => $isDarkMode && `#fff`};
+    background-color: ${({ $isDarkMode }) =>
+      $isDarkMode && `${colors.lighterDark}`};
     padding: 0.875rem 0.825rem;
     &::placeholder {
       color: ${colors.grey};
@@ -44,8 +53,12 @@ export const StyledTextArea = styled(TextareaAutosize)`
   max-width: 100%;
   min-height: 21.4375rem;
   max-height: 21.4375rem;
-  border: 1px solid ${colors.grey};
+  border: 1px solid
+    ${({ $isDarkMode }) => ($isDarkMode ? `${colors.dark}` : `${colors.grey}`)};
   border-radius: 10px;
+  color: ${({ $isDarkMode }) => $isDarkMode && `#fff`};
+  background-color: ${({ $isDarkMode }) =>
+    $isDarkMode && `${colors.lighterDark}`};
   font-family: 'Roboto';
   font-size: 1rem;
   &::placeholder {
