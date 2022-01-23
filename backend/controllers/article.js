@@ -143,7 +143,11 @@ exports.deleteComment = (req, res, next) => {
     })
   }
   Comment.findOne({ where: { id: req.params.commentId } }).then(comment => {
-    if (req.body.userId !== comment.UserId && req.body.admin === 'false')
+    if (
+      comment &&
+      req.body.userId !== comment.UserId &&
+      req.body.admin === 'false'
+    )
       return res.status(401).json({
         message: "Vous n'avez pas l'autorisation de supprimer ce commentaire.",
       })

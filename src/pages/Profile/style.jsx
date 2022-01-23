@@ -65,6 +65,7 @@ export const UserJob = styled.p`
   margin-bottom: 0.5rem;
   font-weight: 600;
   font-size: 1.0625rem;
+  color: ${({ isDarkMode }) => isDarkMode && `#fff`};
 `
 export const ProfileUserJob = styled.input`
   margin-bottom: 0.5rem;

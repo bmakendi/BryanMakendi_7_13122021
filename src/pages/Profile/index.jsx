@@ -183,7 +183,7 @@ const Profile = () => {
                 />
               </form>
             ) : (
-              <UserJob>{user.job}</UserJob>
+              <UserJob isDarkMode={theme === 'dark'}>{user.job}</UserJob>
             )}
           </ProfileJobWrapper>
           <ProfileUserContact to={`mailto:${user.email}`}>

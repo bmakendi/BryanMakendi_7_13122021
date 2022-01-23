@@ -4,10 +4,13 @@ export const ThemeContext = createContext()
 
 export const ThemeProvider = ({ children }) => {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)')
-  const initalTheme = prefersDark ? 'dark' : 'light'
-  const [theme, setTheme] = useState(initalTheme)
+  let preferred = localStorage.getItem('theme')
+  const initialTheme = prefersDark ? 'dark' : 'light'
+  const [theme, setTheme] = useState(preferred ? preferred : initialTheme)
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light')
+    localStorage.setItem('theme', theme === 'light' ? 'dark' : 'light')
+    preferred = localStorage.getItem('theme')
   }
 
   return (
