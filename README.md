@@ -6,8 +6,6 @@ The frontend was created with [React](https://github.com/facebook/create-react-a
 
 ## **Important**
 
----
-
 The project was developped on node version 16.
 
 You will also need to have mysql installed, with a database named "groupomania".
@@ -48,9 +46,9 @@ The app is a social network made for a company named Groupomnia, where you can s
 
 Features like dark mode and a searchbar were also implemented, so don't hesitate to play around with it !
 
-## Contact me
-
 ---
+
+## Contact me
 
 Mail : bryan.makendi@gmail.com
 
