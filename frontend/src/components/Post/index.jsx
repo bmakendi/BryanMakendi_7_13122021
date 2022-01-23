@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types'
 import DefaultPicture from '../../assets/images/profile.png'
-import styled from 'styled-components'
-import colors from '../../utils/colors'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import SendIcon from '@mui/icons-material/Send'
-import { IconButton, TextareaAutosize } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 import { ThemeContext } from '../../utils/context'
 import { Options, OptionItem } from '../../components/Options'
@@ -22,180 +19,31 @@ import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Comment from '../Comment'
 import RoundedBtn from '../RoundedBtn'
 import { useMediaQueries } from '../../utils/MediaQueries'
-
-const PostWrapper = styled.article`
-  padding: 36px 0 21px;
-  border-bottom: solid 1px
-    ${({ $isDarkMode }) =>
-      $isDarkMode ? `${colors.darkBorderColor}` : `${colors.lightgrey}`};
-  .interaction-icon {
-    width: 36px;
-    height: 36px;
-    background-color: ${({ $isDarkMode }) =>
-      $isDarkMode ? `${colors.lighterDark}` : `${colors.lightgrey}`};
-    color: ${colors.iconGrey};
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    &:hover {
-      background-color: ${({ $isDarkMode }) =>
-        $isDarkMode ? `${colors.darkHover}` : `${colors.lightblue}`};
-      color: ${colors.blue};
-    }
-  }
-`
-const UpperContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-const UserDisplay = styled.div`
-  display: flex;
-  gap: 11px;
-  margin-bottom: 15px;
-`
-const UserPicture = styled.img`
-  width: ${({ comment }) => (comment ? '2.25rem' : '2.5rem')};
-  height: ${({ comment }) => (comment ? '2.25rem' : '2.5rem')};
-  object-fit: cover;
-  border-radius: 50%;
-`
-const UserInfo = styled.div`
-  div,
-  p {
-    color: ${({ $isDarkMode }) => $isDarkMode && '#FFF'};
-  }
-`
-const UserName = styled.p`
-  font-weight: bold;
-`
-const SubInfo = styled.div``
-const Admin = styled.span`
-  display: ${({ admin }) => (admin ? 'inline' : 'none')};
-  font-size: 0.875rem;
-`
-const Date = styled.span`
-  font-size: 0.813rem;
-  color: ${colors.grey};
-`
-const PostText = styled.div`
-  max-height: 6.625rem;
-  margin-bottom: 1.25rem;
-  p {
-    color: ${({ $isDarkMode }) => $isDarkMode && '#FFF'};
-  }
-`
-const PostTitle = styled.p`
-  font-weight: 500;
-  margin-bottom: 14px;
-  max-height: 3.5625rem;
-`
-const PostContent = styled.p`
-  font-size: 0.9375rem;
-  max-height: 2.5rem;
-  white-space: pre-wrap;
-`
-const Interactions = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-const LikeIconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  .like-icon {
-    background-color: ${({ liked, $isDarkMode }) =>
-      liked && !$isDarkMode && `${colors.lightblue}`};
-    background-color: ${({ liked, $isDarkMode }) =>
-      liked && $isDarkMode && `${colors.darkHover}`};
-    color: ${({ liked }) => (liked ? `${colors.blue}` : `${colors.iconGrey}`)};
-  }
-  span {
-    color: ${colors.iconGrey};
-    font-size: 0.875rem;
-    font-weight: 700;
-  }
-`
-const LikeIcon = styled.div``
-const CommentIconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  span {
-    color: ${colors.iconGrey};
-    font-size: 0.875rem;
-    font-weight: 700;
-  }
-`
-const CommentIcon = styled.div``
-export const MoreIcon = styled(IconButton)`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  @media all {
-    &:hover {
-      background-color: ${colors.lightgrey};
-    }
-  }
-  svg {
-    color: ${colors.iconGrey};
-  }
-`
-const PostOptions = styled.div`
-  position: relative;
-`
-const CommentSection = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  max-width: 100%;
-  gap: 17px;
-  margin-top: 0.9375rem;
-`
-const CommentInput = styled(TextareaAutosize)`
-  padding: 0.8125rem 0.625rem;
-  width: 14.7rem;
-  min-height: 2.5rem;
-  max-height: 2.5rem;
-  border: 1px solid
-    ${({ $isDarkMode }) =>
-      $isDarkMode ? `${colors.dark}` : `${colors.lightgrey}`};
-  border-radius: 30px;
-  font-family: 'Roboto';
-  font-size: 0.9375rem;
-  flex: 1;
-  background-color: #fff;
-  &::placeholder {
-    position: absolute;
-    opacity: 1;
-    font-family: 'Roboto';
-    font-size: 0.9375rem;
-    top: 10px;
-    color: ${colors.iconGrey};
-  }
-`
-const SendBtn = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: ${colors.grey};
-  background-color: ${colors.lightgrey};
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 100%;
-  cursor: pointer;
-  &:hover {
-    color: ${colors.blue};
-    background-color: ${colors.lightblue};
-  }
-`
-const Comments = styled.div`
-  margin-left: 2.625rem;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-`
+import {
+  PostWrapper,
+  UpperContainer,
+  UserDisplay,
+  UserPicture,
+  UserInfo,
+  SubInfo,
+  UserName,
+  PostContent,
+  PostOptions,
+  PostText,
+  PostTitle,
+  Admin,
+  Date,
+  MoreIcon,
+  Interactions,
+  LikeIconWrapper,
+  LikeIcon,
+  CommentSection,
+  CommentIcon,
+  CommentIconWrapper,
+  Comments,
+  CommentInput,
+  SendBtn,
+} from './style'
 
 const Post = ({
   articleId,
