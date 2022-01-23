@@ -13,7 +13,7 @@ import {
   UserContext,
   ThemeContext,
 } from '../../utils/context'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import PersonIcon from '@mui/icons-material/Person'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
@@ -113,7 +113,7 @@ const ArrowDown = styled.div`
   }
 `
 
-const Header = () => {
+const Header = ({ searching }) => {
   const [open, setOpen] = useState(false)
   const { theme, toggleTheme } = useContext(ThemeContext)
   const { toggleLogged } = useContext(UserContext)
@@ -121,9 +121,11 @@ const Header = () => {
   const { user } = useFetchUser(
     'http://localhost:8000/auth/' + localStorage.getItem('userId')
   )
+  const location = useLocation()
   const fullname = user.firstname + ' ' + user.name
   const { isTabletOrMobile } = useMediaQueries()
   const id = localStorage.getItem('userId')
+  const isHomePage = location.pathname === '/groupomania'
 
   const logOut = () => {
     localStorage.clear()
@@ -148,8 +150,10 @@ const Header = () => {
           </Link>
           <Searchbar
             type='search'
+            disabled={!isHomePage}
             placeholder='Rechercher'
             $isDarkMode={theme === 'dark'}
+            onInput={e => searching(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
