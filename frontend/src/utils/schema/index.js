@@ -22,7 +22,7 @@ export const signupSchema = yup.object().shape({
   job: yup.string().required('Veuillez indiquer votre emploi'),
   password: yup
     .string()
-    .min(6, 'Le mot de passe doit contenir au moins 6 caractères et 1 chiffre')
+    .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
     .required('Veuillez entrer un mot de passe'),
   confirmPassword: yup
     .string()
