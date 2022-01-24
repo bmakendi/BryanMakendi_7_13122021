@@ -16,7 +16,7 @@ export const signupSchema = yup.object().shape({
     .string()
     .matches(
       /^[a-z]+\.[a-z]+@\bgroupomania\b\.\bcom\b$/,
-      "L'adresse mail n'est pas au bon format"
+      'Doit être au format prenom.nom@groupomania.com'
     )
     .required('Veuillez entrer une adresse mail'),
   job: yup.string().required('Veuillez indiquer votre emploi'),
