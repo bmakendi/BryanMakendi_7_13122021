@@ -124,6 +124,7 @@ const Comment = ({
             <MoreIcon
               onClick={() => setOpen(prev => !prev)}
               className={open && 'interaction-icon'}
+              $isDarkMode={theme === 'dark'}
             >
               <MoreHorizIcon />
             </MoreIcon>

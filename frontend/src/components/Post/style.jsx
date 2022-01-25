@@ -112,11 +112,8 @@ export const MoreIcon = styled(IconButton)`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  @media all {
-    &:hover {
-      background-color: ${colors.lightgrey};
-    }
-  }
+  background-color: ${({ $isDarkMode }) =>
+    $isDarkMode ? `${colors.lighterDark}` : `${colors.lightgrey}`};
   svg {
     color: ${colors.iconGrey};
   }
