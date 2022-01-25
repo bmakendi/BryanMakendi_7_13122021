@@ -26,6 +26,15 @@ exports.signup = (req, res, next) => {
       .status(400)
       .send(new Error('Bad request at signup ! Check your entries.'))
   }
+  if (!req.body.email.match(/^[a-z]+\.[a-z]+@\bgroupomania\b\.\bcom\b$/)) {
+    return res
+      .status(400)
+      .send(
+        new Error(
+          "L'adresse mail doit être au format prenom.nom@groupomania.com"
+        )
+      )
+  }
   let admin, job
   job = capitalizeFirstLetter(req.body.job)
   if (
